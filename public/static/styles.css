@@ -1,4 +1,4 @@
-/* NexusCard TCG Marketplace Styles */
+/* Duelist Emporium Web3 Yu-Gi-Oh Styles */
 
 /* Smooth scrolling */
 html {
@@ -23,13 +23,42 @@ html {
   background: #e55a2b;
 }
 
-/* Card glow animation */
-@keyframes card-glow {
+/* Cyber animations */
+@keyframes glow-pulse {
   from {
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    box-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff, 0 0 40px #00d4ff;
   }
   to {
-    box-shadow: 0 0 40px rgba(255, 107, 53, 0.8), 0 0 60px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+  }
+}
+
+@keyframes neon-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+    text-shadow: none;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes card-glow {
+  from {
+    box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+  }
+  to {
+    box-shadow: 0 0 40px rgba(233, 69, 96, 0.8), 0 0 60px rgba(233, 69, 96, 0.3);
   }
 }
 
@@ -63,6 +92,18 @@ html {
 }
 
 /* Utility classes */
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+.animate-neon-flicker {
+  animation: neon-flicker 1.5s ease-in-out infinite alternate;
+}
+
+.animate-scan-line {
+  animation: scan-line 2s linear infinite;
+}
+
 .animate-card-glow {
   animation: card-glow 2s ease-in-out infinite alternate;
 }

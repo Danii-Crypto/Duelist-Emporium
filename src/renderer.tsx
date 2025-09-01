@@ -2,14 +2,14 @@ import { jsxRenderer } from 'hono/jsx-renderer'
 import { Navigation } from './components/Navigation'
 import { Footer } from './components/Footer'
 
-export const renderer = jsxRenderer(({ children, title = 'NexusCard - Premium TCG Marketplace' }) => {
+export const renderer = jsxRenderer(({ children, title = 'Duelist Emporium - Premier Yu-Gi-Oh Accessories' }) => {
   return (
     <html lang="en">
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title}</title>
-        <meta name="description" content="NexusCard - The ultimate Web3 TCG marketplace. Discover rare cards, premium accessories, and digital collectibles." />
+        <meta name="description" content="Duelist Emporium has been the premier destination for serious Yu-Gi-Oh players. Premium accessories for every card, every tournament, every duelist." />
         
         {/* Tailwind CSS */}
         <script src="https://cdn.tailwindcss.com"></script>
@@ -20,23 +20,24 @@ export const renderer = jsxRenderer(({ children, title = 'NexusCard - Premium TC
         {/* Custom CSS */}
         <link href="/static/styles.css" rel="stylesheet" />
         
-        {/* Tailwind Custom Config - TCG Web3 Theme */}
+        {/* Tailwind Custom Config - Duelist Emporium Theme */}
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
               theme: {
                 extend: {
                   colors: {
-                    'nexus': {
-                      'black': '#0c0c0c',
-                      'dark': '#1a1a1a',
-                      'gray': '#2a2a2a',
-                      'accent': '#ff6b35',
+                    'duelist': {
+                      'dark': '#0a0a0f',
+                      'darker': '#050508',
+                      'purple': '#1a0d2e',
+                      'blue': '#0d1b2a',
+                      'accent': '#e94560',
                       'gold': '#ffd700',
-                      'rare': '#9d4edd',
-                      'epic': '#e63946',
-                      'legendary': '#f77f00',
-                      'mythic': '#06ffa5'
+                      'neon-blue': '#00d4ff',
+                      'neon-purple': '#b300ff',
+                      'neon-green': '#00ff41',
+                      'electric': '#00ffff'
                     },
                     'card': {
                       'common': '#94a3b8',
@@ -48,9 +49,9 @@ export const renderer = jsxRenderer(({ children, title = 'NexusCard - Premium TC
                     }
                   },
                   fontFamily: {
-                    'gaming': ['Rajdhani', 'sans-serif'],
+                    'cyber': ['Orbitron', 'sans-serif'],
                     'display': ['Exo 2', 'sans-serif'],
-                    'mono': ['Fira Code', 'monospace']
+                    'mono': ['Share Tech Mono', 'monospace']
                   },
                   animation: {
                     'card-glow': 'card-glow 2s ease-in-out infinite alternate',
@@ -82,15 +83,20 @@ export const renderer = jsxRenderer(({ children, title = 'NexusCard - Premium TC
           `
         }} />
         
-        {/* Gaming Fonts */}
-        <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        {/* Cyber Fonts */}
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
       </head>
-      <body className="bg-nexus-black text-white min-h-screen font-gaming antialiased">
-        {/* Background Pattern */}
-        <div className="fixed inset-0 opacity-5 z-0">
+      <body className="bg-duelist-darker text-white min-h-screen font-cyber antialiased overflow-x-hidden">
+        {/* Matrix Background Pattern */}
+        <div className="fixed inset-0 opacity-10 z-0">
           <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff6b35' fill-opacity='1'%3E%3Cpath d='m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2300d4ff' fill-opacity='0.05'%3E%3Cpath d='M40 40V20H20V0H0v20h20v20z'/%3E%3C/g%3E%3C/svg%3E")`
           }}></div>
+        </div>
+        
+        {/* Animated Scan Lines */}
+        <div className="fixed inset-0 z-5 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-duelist-neon-blue/5 to-transparent h-1 animate-scan-line"></div>
         </div>
         
         {/* Main Content */}

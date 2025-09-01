@@ -2,7 +2,7 @@ export function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-nexus-black via-nexus-dark to-nexus-gray py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-duelist-darker via-duelist-dark to-duelist-purple py-20 overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-32 h-48 bg-gradient-to-br from-card-rare/20 to-card-epic/20 rounded-lg rotate-12 animate-float"></div>
@@ -15,38 +15,52 @@ export function HomePage() {
             {/* Hero Content */}
             <div className="space-y-8">
               <div className="space-y-6">
-                <div className="inline-flex items-center space-x-2 bg-nexus-dark/60 border border-nexus-accent/30 rounded-full px-4 py-2 backdrop-blur-sm">
-                  <div className="w-2 h-2 bg-nexus-accent rounded-full animate-pulse"></div>
-                  <span className="text-nexus-accent font-medium text-sm">Premium TCG Marketplace</span>
+                <div className="inline-flex items-center space-x-3 bg-duelist-dark/80 border-2 border-duelist-neon-blue/30 rounded-lg px-6 py-3 backdrop-blur-sm relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-duelist-neon-blue/10 to-duelist-neon-purple/10 animate-glow-pulse"></div>
+                  <div className="w-3 h-3 bg-duelist-neon-green rounded-full animate-pulse relative z-10"></div>
+                  <span className="text-duelist-neon-blue font-mono text-sm tracking-wider relative z-10">PREMIER DESTINATION</span>
+                  <i className="fas fa-crown text-duelist-gold animate-pulse relative z-10"></i>
                 </div>
                 
-                <h1 className="text-5xl lg:text-7xl font-display font-black leading-tight">
-                  <span className="bg-gradient-to-r from-white via-nexus-accent to-nexus-gold bg-clip-text text-transparent">
-                    Collect.<br />
-                    Trade.<br />
-                    Dominate.
+                <h1 className="text-5xl lg:text-7xl font-cyber font-bold leading-tight relative">
+                  <span className="bg-gradient-to-r from-duelist-neon-blue via-duelist-electric to-duelist-neon-purple bg-clip-text text-transparent animate-glow-pulse">
+                    DUELIST
+                  </span>
+                  <br />
+                  <span className="bg-gradient-to-r from-duelist-accent via-duelist-gold to-duelist-neon-green bg-clip-text text-transparent animate-glow-pulse delay-500">
+                    EMPORIUM
                   </span>
                 </h1>
                 
-                <p className="text-xl text-gray-300 leading-relaxed max-w-lg">
-                  Discover rare cards, premium accessories, and exclusive collectibles in the ultimate Web3 TCG marketplace.
-                </p>
+                <div className="space-y-4">
+                  <p className="text-xl text-duelist-electric leading-relaxed font-mono max-w-2xl">
+                    <span className="text-duelist-neon-green">&gt;</span> Duelist Emporium has been the premier destination for serious Yu-Gi-Oh players. 
+                    We understand that every card matters, every tournament counts, and every duelist deserves the finest accessories.
+                  </p>
+                  
+                  <p className="text-lg text-gray-400 font-mono max-w-2xl">
+                    <span className="text-duelist-neon-blue">//</span> From casual collectors to world championship competitors, 
+                    our carefully curated selection ensures you'll find exactly what you need to take your game to the next level.
+                  </p>
+                </div>
               </div>
               
-              {/* CTA Buttons */}
+              {/* Cyber CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href="/shop" className="group relative bg-gradient-to-r from-nexus-accent to-nexus-gold text-white px-8 py-4 rounded-lg font-semibold overflow-hidden transition-all duration-300 hover:scale-105 text-center">
-                  <div className="absolute inset-0 bg-gradient-to-r from-nexus-gold to-nexus-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <a href="/shop" className="group relative bg-gradient-to-r from-duelist-accent to-duelist-gold text-white px-8 py-4 rounded-lg font-cyber font-bold overflow-hidden transition-all duration-300 hover:scale-105 text-center">
+                  <div className="absolute inset-0 bg-gradient-to-r from-duelist-neon-purple to-duelist-neon-blue opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="relative z-10 flex items-center justify-center space-x-2">
                     <i className="fas fa-shopping-bag"></i>
-                    <span>Shop Collection</span>
+                    <span>ENTER SHOP</span>
                   </span>
+                  <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 </a>
                 
-                <a href="/about" className="group border-2 border-gray-600 text-gray-300 px-8 py-4 rounded-lg font-semibold hover:border-nexus-accent hover:text-nexus-accent transition-all duration-300 text-center">
-                  <span className="flex items-center justify-center space-x-2">
+                <a href="/about" className="group relative border-2 border-duelist-neon-blue/50 text-duelist-electric px-8 py-4 rounded-lg font-cyber font-bold hover:border-duelist-neon-blue hover:text-duelist-neon-blue transition-all duration-300 text-center overflow-hidden">
+                  <div className="absolute inset-0 bg-duelist-neon-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10 flex items-center justify-center space-x-2">
                     <i className="fas fa-info-circle"></i>
-                    <span>Learn More</span>
+                    <span>LEARN MORE</span>
                   </span>
                 </a>
               </div>
