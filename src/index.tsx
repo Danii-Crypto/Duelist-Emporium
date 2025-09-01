@@ -9,7 +9,53 @@ import { CartPage } from './pages/CartPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { AboutPage } from './pages/AboutPage'
 
-const app = new Hono()
+type Bindings = {
+  DB: D1Database
+}
+
+const app = new Hono<{ Bindings: Bindings }>()
+
+// Helper function to fetch and transform products
+async function fetchProducts(env: { DB: D1Database }, category?: string) {
+  try {
+    let query = 'SELECT * FROM products'
+    let params: any[] = []
+    
+    if (category) {
+      query += ' WHERE category = ?'
+      params = [category]
+    }
+    
+    query += ' ORDER BY created_at DESC'
+    
+    const result = await env.DB.prepare(query).bind(...params).all()
+    
+    // Transform database results to match frontend format
+    const products = result.results.map((product: any) => ({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      categoryDisplay: product.category.split('-').map((word: string) => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' '),
+      price: product.price,
+      rarity: product.price >= 40 ? 'Epic' : product.price >= 25 ? 'Ultra Rare' : 'Rare',
+      image: product.image_url,
+      description: product.description,
+      features: ['Tournament Grade', 'Premium Materials', 'Professional Quality', 'Secure Storage'],
+      stats: { protection: 95, shuffle: 92, durability: 88 },
+      inStock: product.stock_quantity > 0,
+      quantity: product.stock_quantity,
+      theme: product.theme,
+      character_name: product.character_name
+    }))
+    
+    return products
+  } catch (error) {
+    console.error('Database error:', error)
+    return []
+  }
+}
 
 // Enable CORS for API routes
 app.use('/api/*', cors())
@@ -25,13 +71,32 @@ app.get('/', (c) => {
   return c.render(<HomePage />)
 })
 
-app.get('/shop', (c) => {
-  return c.render(<ShopPage />)
+app.get('/shop', async (c) => {
+  const { env } = c
+  const products = await fetchProducts(env)
+  return c.render(<ShopPage products={products} />)
 })
 
-app.get('/shop/:category', (c) => {
+app.get('/shop/:category', async (c) => {
   const category = c.req.param('category')
-  return c.render(<ShopPage category={category} />)
+  const validCategories = [
+    'single-deck-boxes',
+    'multi-deck-boxes', 
+    'binders',
+    'card-sleeves',
+    'playmats',
+    'storage',
+    'booster-cases',
+    'accessories'
+  ]
+  
+  if (!validCategories.includes(category)) {
+    return c.redirect('/shop')
+  }
+  
+  const { env } = c
+  const products = await fetchProducts(env, category)
+  return c.render(<ShopPage category={category} products={products} />)
 })
 
 app.get('/product/:id', (c) => {
@@ -52,118 +117,60 @@ app.get('/about', (c) => {
 })
 
 // API Routes
-app.get('/api/products', (c) => {
-  const products = [
-    {
-      id: 1,
-      name: 'Dragon Shield Nexus Sleeves',
-      category: 'sleeves',
-      categoryDisplay: 'Card Sleeves',
-      price: 15.99,
-      originalPrice: 19.99,
-      rarity: 'Ultra Rare',
-      image: '/static/images/dragon-shield-sleeves.jpg',
-      description: 'Premium holographic card sleeves with quantum-lock technology',
-      features: ['Holographic finish', 'Quantum protection', 'Tournament legal', '100 count'],
-      stats: { protection: 95, durability: 90, style: 98 }
-    },
-    {
-      id: 2,
-      name: 'Mystic Realm Playmat',
-      category: 'playmats',
-      categoryDisplay: 'Playmats',
-      price: 34.99,
-      originalPrice: 44.99,
-      rarity: 'Secret Rare',
-      image: '/static/images/playmat.jpg',
-      description: 'Limited edition tournament playmat with AR compatibility',
-      features: ['AR enhanced', 'Tournament size', 'Non-slip base', 'Limited edition'],
-      stats: { quality: 100, design: 95, functionality: 92 }
-    },
-    {
-      id: 3,
-      name: 'Legendary Vault Deck Box',
-      category: 'deck-boxes',
-      categoryDisplay: 'Deck Boxes',
-      price: 29.99,
-      originalPrice: 39.99,
-      rarity: 'Legendary',
-      image: '/static/images/deck-box.jpg',
-      description: 'Biometric-secured deck storage with holographic display',
-      features: ['Biometric lock', 'LED display', 'Double deck capacity', 'Magnetic closure'],
-      stats: { security: 100, capacity: 85, style: 93 }
-    },
-    {
-      id: 4,
-      name: 'Quantum Dice Set',
-      category: 'accessories',
-      categoryDisplay: 'Accessories',
-      price: 24.99,
-      originalPrice: 29.99,
-      rarity: 'Rare',
-      image: '/static/images/dice-set.jpg',
-      description: 'Digital dice with blockchain randomization technology',
-      features: ['Blockchain verified', 'LED indicators', 'Wireless charging', 'Tournament approved'],
-      stats: { technology: 88, reliability: 95, innovation: 92 }
-    },
-    {
-      id: 5,
-      name: 'Celestial Binder',
-      category: 'storage',
-      categoryDisplay: 'Storage',
-      price: 49.99,
-      originalPrice: 64.99,
-      rarity: 'Ultra Rare',
-      image: '/static/images/binder.jpg',
-      description: 'Premium holographic card binder with digital inventory tracking',
-      features: ['Digital tracking', 'Holographic pages', '500+ card capacity', 'RFID enabled'],
-      stats: { capacity: 98, organization: 94, innovation: 96 }
-    },
-    {
-      id: 6,
-      name: 'Neon Genesis Tokens',
-      category: 'accessories',
-      categoryDisplay: 'Accessories',
-      price: 18.99,
-      originalPrice: 22.99,
-      rarity: 'Common',
-      image: '/static/images/tokens.jpg',
-      description: 'Holographic token set with customizable LED effects',
-      features: ['LED customization', 'Acrylic material', '20 token variety', 'Wireless sync'],
-      stats: { versatility: 87, visibility: 91, durability: 89 }
-    }
-  ]
+app.get('/api/products', async (c) => {
+  const { env } = c
+  const category = c.req.query('category')
   
-  return c.json({ products })
+  try {
+    const products = await fetchProducts(env, category)
+    return c.json({ products })
+  } catch (error) {
+    console.error('Database error:', error)
+    return c.json({ error: 'Failed to fetch products' }, 500)
+  }
 })
 
-app.get('/api/products/:id', (c) => {
-  const id = parseInt(c.req.param('id'))
-  // This would normally query a database
-  const products = [
-    {
-      id: 1,
-      name: 'Dragon Shield Nexus Sleeves',
-      category: 'sleeves',
-      categoryDisplay: 'Card Sleeves',
-      price: 15.99,
-      originalPrice: 19.99,
-      rarity: 'Ultra Rare',
-      image: '/static/images/dragon-shield-sleeves.jpg',
-      description: 'Premium holographic card sleeves with quantum-lock technology',
-      features: ['Holographic finish', 'Quantum protection', 'Tournament legal', '100 count'],
-      stats: { protection: 95, durability: 90, style: 98 },
-      inStock: true,
-      quantity: 47
+
+
+// Individual product API endpoint - also updated to use database
+app.get('/api/products/:id', async (c) => {
+  const { env } = c;
+  const id = parseInt(c.req.param('id'));
+  
+  try {
+    const result = await env.DB.prepare('SELECT * FROM products WHERE id = ?').bind(id).first();
+    
+    if (!result) {
+      return c.json({ error: 'Product not found' }, 404);
     }
-  ]
-  
-  const product = products.find(p => p.id === id)
-  if (!product) {
-    return c.json({ error: 'Product not found' }, 404)
+    
+    // Transform database result to match frontend format
+    const product = {
+      id: result.id,
+      name: result.name,
+      category: result.category,
+      categoryDisplay: result.category.split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' '),
+      price: result.price,
+      rarity: result.price >= 40 ? 'Epic' : result.price >= 25 ? 'Ultra Rare' : 'Rare',
+      image: result.image_url,
+      description: result.description,
+      features: ['Tournament Grade', 'Premium Materials', 'Professional Quality', 'Secure Storage'],
+      stats: { protection: 95, shuffle: 92, durability: 88 },
+      inStock: result.stock_quantity > 0,
+      quantity: result.stock_quantity,
+      theme: result.theme,
+      character_name: result.character_name
+    };
+    
+    return c.json({ product });
+  } catch (error) {
+    console.error('Database error:', error);
+    return c.json({ error: 'Failed to fetch product' }, 500);
   }
-  
-  return c.json({ product })
 })
+
+
 
 export default app

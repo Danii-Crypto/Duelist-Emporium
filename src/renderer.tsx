@@ -28,16 +28,15 @@ export const renderer = jsxRenderer(({ children, title = 'Duelist Emporium - Pre
                 extend: {
                   colors: {
                     'duelist': {
-                      'dark': '#0a0a0f',
-                      'darker': '#050508',
-                      'purple': '#1a0d2e',
-                      'blue': '#0d1b2a',
-                      'accent': '#e94560',
-                      'gold': '#ffd700',
-                      'neon-blue': '#00d4ff',
-                      'neon-purple': '#b300ff',
-                      'neon-green': '#00ff41',
-                      'electric': '#00ffff'
+                      'dark': '#1a1a2e',
+                      'darker': '#16213e',
+                      'purple': '#7209b7',
+                      'blue': '#0f3460',
+                      'accent': '#fddb3a',
+                      'gold': '#fddb3a',
+                      'yellow': '#fddb3a',
+                      'dark-purple': '#16213e',
+                      'light-purple': '#533483'
                     },
                     'card': {
                       'common': '#94a3b8',
@@ -86,7 +85,7 @@ export const renderer = jsxRenderer(({ children, title = 'Duelist Emporium - Pre
         {/* Cyber Fonts */}
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
       </head>
-      <body className="bg-duelist-darker text-white min-h-screen font-cyber antialiased overflow-x-hidden">
+      <body className="bg-gradient-to-br from-duelist-dark via-duelist-darker to-duelist-purple text-white min-h-screen font-sans antialiased overflow-x-hidden">
         {/* Matrix Background Pattern */}
         <div className="fixed inset-0 opacity-10 z-0">
           <div className="absolute inset-0" style={{

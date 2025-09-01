@@ -9,11 +9,11 @@ export function Footer() {
               <div className="w-8 h-8 bg-gradient-to-br from-nexus-accent to-nexus-gold rounded-lg flex items-center justify-center">
                 <i className="fas fa-bolt text-white"></i>
               </div>
-              <span className="text-xl font-display font-bold text-white">NexusCard</span>
+              <span className="text-xl font-display font-bold text-white">Duelist Emporium</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              The premier Web3 TCG marketplace for collectors, players, and enthusiasts. 
-              Discover rare finds and premium accessories.
+              Duelist Emporium has been the premier destination for serious Yu-Gi-Oh players. 
+              Premium accessories for collectors and tournament competitors.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-nexus-accent transition-colors">
@@ -35,11 +35,11 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Shop Categories</h3>
             <ul className="space-y-2">
-              <li><a href="/shop/sleeves" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Card Sleeves</a></li>
-              <li><a href="/shop/playmats" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Playmats</a></li>
               <li><a href="/shop/deck-boxes" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Deck Boxes</a></li>
-              <li><a href="/shop/accessories" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Accessories</a></li>
-              <li><a href="/shop/storage" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Storage Solutions</a></li>
+              <li><a href="/shop/sleeves" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Sleeves</a></li>
+              <li><a href="/shop/over-sleeves" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Over Sleeves</a></li>
+              <li><a href="/shop/playmats" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Playmats</a></li>
+              <li><a href="/shop/album-binders" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Album Binders</a></li>
             </ul>
           </div>
           
@@ -84,7 +84,7 @@ export function Footer() {
         
         <div className="border-t border-nexus-gray/30 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-gray-400 text-sm">
-            &copy; 2024 NexusCard. All rights reserved.
+            &copy; 2024 Duelist Emporium. All rights reserved.
           </p>
           <div className="flex items-center space-x-6">
             <a href="#" className="text-gray-400 hover:text-nexus-accent transition-colors text-sm">Privacy Policy</a>

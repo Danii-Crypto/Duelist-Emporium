@@ -1,152 +1,157 @@
-// NexusCard TCG Marketplace Frontend
+// Duelist Emporium - Main Application JavaScript
 
-class NexusCard {
+class DuelistEmporiumApp {
   constructor() {
-    this.cart = JSON.parse(localStorage.getItem('nexus-cart')) || [];
     this.products = [];
-    this.currentPage = this.getCurrentPage();
+    this.cart = JSON.parse(localStorage.getItem('duelistCart')) || [];
+    this.currentCategory = this.getCurrentCategory();
     this.init();
   }
 
-  getCurrentPage() {
-    const path = window.location.pathname;
-    if (path === '/') return 'home';
-    if (path.startsWith('/shop')) return 'shop';
-    if (path.startsWith('/product')) return 'product';
-    if (path === '/cart') return 'cart';
-    if (path === '/profile') return 'profile';
-    if (path === '/about') return 'about';
-    return 'unknown';
+  init() {
+    // Check if products are already rendered server-side
+    const productsGrid = document.getElementById('products-grid');
+    const hasServerRenderedProducts = productsGrid && productsGrid.children.length > 0;
+    
+    if (!hasServerRenderedProducts) {
+      // Fallback to client-side loading if no server-rendered products
+      this.loadProducts();
+    } else {
+      // Products already rendered server-side, just set up interactions
+      this.setupProductInteractions();
+    }
+    
+    this.setupEventListeners();
+    this.updateCartCount();
+    this.setupMobileMenu();
   }
 
-  async init() {
-    await this.loadProducts();
-    this.updateCartUI();
-    this.bindGlobalEvents();
-    
-    // Initialize page-specific functionality
-    switch (this.currentPage) {
-      case 'home':
-        this.initHomePage();
-        break;
-      case 'shop':
-        this.initShopPage();
-        break;
-      case 'product':
-        this.initProductPage();
-        break;
-      case 'cart':
-        this.initCartPage();
-        break;
+  getCurrentCategory() {
+    const path = window.location.pathname;
+    if (path.startsWith('/shop/')) {
+      return path.split('/')[2];
     }
+    return null;
   }
 
   async loadProducts() {
     try {
       const response = await axios.get('/api/products');
       this.products = response.data.products;
+      this.renderProducts();
+      this.updateProductCount();
     } catch (error) {
       console.error('Failed to load products:', error);
-      this.showNotification('Failed to load products', 'error');
+      this.showError('Failed to load products. Please try again.');
     }
   }
 
-  // Page Initialization Methods
-  initHomePage() {
-    this.renderFeaturedProducts();
-    this.initStatsCounters();
+  setupProductInteractions() {
+    // Set up interactions for server-rendered products
+    this.attachProductCardListeners();
   }
 
-  initShopPage() {
-    this.renderShopProducts();
-    this.initShopFilters();
-  }
+  renderProducts() {
+    const grid = document.getElementById('products-grid');
+    const noProducts = document.getElementById('no-products');
+    
+    if (!grid || !noProducts) return;
 
-  initProductPage() {
-    const productId = this.getProductIdFromURL();
-    this.loadProductDetails(productId);
-  }
+    let filteredProducts = this.products;
+    
+    // Filter by current category if set
+    if (this.currentCategory) {
+      filteredProducts = this.products.filter(p => p.category === this.currentCategory);
+    }
 
-  initCartPage() {
-    this.renderCartPage();
-  }
+    if (filteredProducts.length === 0) {
+      grid.classList.add('hidden');
+      noProducts.classList.remove('hidden');
+      return;
+    }
 
-  // Product Rendering Methods
-  renderFeaturedProducts() {
-    const container = document.getElementById('featured-products');
-    if (!container) return;
+    noProducts.classList.add('hidden');
+    grid.classList.remove('hidden');
 
-    const featuredProducts = this.products.slice(0, 6);
-    container.innerHTML = featuredProducts.map(product => this.createProductCard(product)).join('');
-  }
-
-  renderShopProducts() {
-    const container = document.getElementById('products-grid');
-    if (!container) return;
-
-    const category = this.getCategoryFromURL();
-    const filteredProducts = category 
-      ? this.products.filter(p => p.category === category)
-      : this.products;
-
-    container.innerHTML = filteredProducts.map(product => this.createProductCard(product)).join('');
+    grid.innerHTML = filteredProducts.map(product => this.createProductCard(product)).join('');
+    
+    // Add event listeners to product cards
+    this.attachProductCardListeners();
   }
 
   createProductCard(product) {
-    const rarityClass = `rarity-${product.rarity.toLowerCase().replace(' ', '-')}`;
-    const discountPercent = product.originalPrice 
-      ? Math.round((1 - product.price / product.originalPrice) * 100)
-      : 0;
+    const discountPercentage = product.originalPrice ? 
+      Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
 
     return `
-      <div class="product-card ${rarityClass} rounded-xl p-6 group cursor-pointer" onclick="app.goToProduct(${product.id})">
-        ${discountPercent > 0 ? `
-          <div class="absolute top-3 right-3 bg-nexus-accent text-white text-xs font-bold px-2 py-1 rounded-full">
-            -${discountPercent}%
+      <div class="product-card bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-750 transition-all duration-300 hover:shadow-lg hover:shadow-duelist-accent/20 group">
+        <div class="aspect-w-1 aspect-h-1 bg-gray-700 relative overflow-hidden">
+          <img 
+            src="${product.image}" 
+            alt="${product.name}"
+            class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="w-full h-48 bg-gradient-to-br from-duelist-purple to-duelist-dark-purple flex items-center justify-center" style="display: none;">
+            <i class="fas fa-box text-4xl text-duelist-accent opacity-50"></i>
           </div>
-        ` : ''}
-        
-        <div class="aspect-w-1 aspect-h-1 mb-4 overflow-hidden rounded-lg bg-nexus-dark relative">
-          <div class="w-full h-48 bg-gradient-to-br from-nexus-dark to-nexus-gray rounded-lg flex items-center justify-center relative">
-            <i class="fas fa-image text-4xl text-gray-500"></i>
-            <div class="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/5 group-hover:opacity-100 opacity-0 transition-opacity"></div>
+          ${discountPercentage > 0 ? `
+            <div class="absolute top-3 left-3 bg-duelist-accent text-black px-2 py-1 rounded-full text-xs font-bold">
+              -${discountPercentage}%
+            </div>
+          ` : ''}
+          <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button class="bg-white/20 hover:bg-white/30 text-white p-2 rounded-full backdrop-blur-sm">
+              <i class="fas fa-heart text-sm"></i>
+            </button>
           </div>
         </div>
         
-        <div class="space-y-3">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="category-badge inline-block mb-2">${product.categoryDisplay}</div>
-              <h3 class="text-lg font-semibold text-white group-hover:text-nexus-accent transition-colors">
-                ${product.name}
-              </h3>
-              <p class="text-sm text-gray-400 mt-1">${product.description}</p>
-            </div>
+        <div class="p-4">
+          <div class="mb-2">
+            <span class="text-xs text-duelist-accent font-semibold uppercase tracking-wide">
+              ${product.categoryDisplay}
+            </span>
           </div>
           
-          <div class="flex items-center justify-between pt-3 border-t border-nexus-black/20">
+          <h3 class="text-white font-semibold mb-2 line-clamp-2 group-hover:text-duelist-accent transition-colors">
+            ${product.name}
+          </h3>
+          
+          <p class="text-gray-400 text-sm mb-3 line-clamp-2">
+            ${product.description}
+          </p>
+          
+          <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
-              <span class="price-current">$${product.price}</span>
-              ${product.originalPrice ? `<span class="price-original">$${product.originalPrice}</span>` : ''}
+              <span class="text-duelist-accent font-bold text-lg">
+                $${product.price}
+              </span>
+              ${product.originalPrice && product.originalPrice > product.price ? `
+                <span class="text-gray-500 line-through text-sm">
+                  $${product.originalPrice}
+                </span>
+              ` : ''}
             </div>
             
             <button 
-              onclick="event.stopPropagation(); app.addToCart(${product.id})" 
-              class="bg-nexus-accent hover:bg-nexus-accent/80 text-white px-4 py-2 rounded-lg transition-colors font-medium flex items-center space-x-2"
+              class="add-to-cart-btn bg-duelist-accent hover:bg-duelist-gold text-black px-4 py-2 rounded-lg font-semibold transition-colors text-sm"
+              data-product-id="${product.id}"
             >
-              <i class="fas fa-plus"></i>
-              <span class="hidden sm:inline">Add</span>
+              <i class="fas fa-plus mr-1"></i>
+              Add
             </button>
           </div>
           
-          ${product.stats ? `
-            <div class="grid grid-cols-3 gap-2 text-xs">
-              ${Object.entries(product.stats).map(([key, value]) => `
-                <div class="text-center">
-                  <div class="text-nexus-accent font-medium">${value}</div>
-                  <div class="text-gray-500 capitalize">${key}</div>
-                </div>
-              `).join('')}
+          ${product.features && product.features.length > 0 ? `
+            <div class="mt-3 pt-3 border-t border-gray-700">
+              <div class="flex flex-wrap gap-1">
+                ${product.features.slice(0, 2).map(feature => `
+                  <span class="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">
+                    ${feature}
+                  </span>
+                `).join('')}
+              </div>
             </div>
           ` : ''}
         </div>
@@ -154,166 +159,102 @@ class NexusCard {
     `;
   }
 
-  async loadProductDetails(productId) {
-    try {
-      const response = await axios.get(`/api/products/${productId}`);
-      const product = response.data.product;
-      this.renderProductDetails(product);
-    } catch (error) {
-      console.error('Failed to load product details:', error);
-      this.showNotification('Product not found', 'error');
+  attachProductCardListeners() {
+    // Add to cart buttons
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const productId = parseInt(btn.dataset.productId);
+        this.addToCart(productId);
+      });
+    });
+
+    // Product card click navigation
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.add-to-cart-btn') || e.target.closest('button')) {
+          return; // Don't navigate if clicking buttons
+        }
+        
+        const productId = card.querySelector('.add-to-cart-btn').dataset.productId;
+        window.location.href = `/product/${productId}`;
+      });
+    });
+  }
+
+  setupEventListeners() {
+    // Category filter buttons
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const category = btn.dataset.category;
+        if (category) {
+          window.location.href = `/shop/${category}`;
+        } else {
+          window.location.href = '/shop';
+        }
+      });
+    });
+
+    // Search functionality
+    const searchInput = document.querySelector('input[placeholder="Search products..."]');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this.searchProducts(e.target.value);
+      });
     }
   }
 
-  renderProductDetails(product) {
-    const container = document.getElementById('product-container');
-    const breadcrumb = document.getElementById('product-breadcrumb');
-    
-    if (breadcrumb) breadcrumb.textContent = product.name;
-    
-    if (!container) return;
+  searchProducts(query) {
+    if (!query.trim()) {
+      this.renderProducts();
+      return;
+    }
 
-    const rarityClass = `rarity-${product.rarity.toLowerCase().replace(' ', '-')}`;
-    
-    container.innerHTML = `
-      <div class="space-y-6">
-        <div class="aspect-w-1 aspect-h-1">
-          <div class="w-full h-96 bg-gradient-to-br from-nexus-dark to-nexus-gray rounded-2xl flex items-center justify-center ${rarityClass}">
-            <i class="fas fa-image text-8xl text-gray-500"></i>
-          </div>
-        </div>
-      </div>
-      
-      <div class="space-y-6">
-        <div>
-          <div class="category-badge inline-block mb-3">${product.categoryDisplay}</div>
-          <h1 class="text-3xl lg:text-4xl font-display font-bold text-white mb-3">${product.name}</h1>
-          <p class="text-gray-400 text-lg">${product.description}</p>
-        </div>
-        
-        <div class="flex items-center space-x-4">
-          <span class="text-3xl font-bold price-current">$${product.price}</span>
-          ${product.originalPrice ? `<span class="text-xl price-original">$${product.originalPrice}</span>` : ''}
-          <span class="px-3 py-1 bg-${product.rarity.toLowerCase()}/20 text-${product.rarity.toLowerCase()} rounded-full text-sm font-medium">
-            ${product.rarity}
-          </span>
-        </div>
-        
-        ${product.features ? `
-          <div>
-            <h3 class="text-lg font-semibold text-white mb-3">Features</h3>
-            <ul class="space-y-2">
-              ${product.features.map(feature => `
-                <li class="flex items-center space-x-2">
-                  <i class="fas fa-check text-nexus-accent"></i>
-                  <span class="text-gray-300">${feature}</span>
-                </li>
-              `).join('')}
-            </ul>
-          </div>
-        ` : ''}
-        
-        ${product.stats ? `
-          <div>
-            <h3 class="text-lg font-semibold text-white mb-3">Specifications</h3>
-            <div class="grid grid-cols-2 gap-4">
-              ${Object.entries(product.stats).map(([key, value]) => `
-                <div class="bg-nexus-gray rounded-lg p-4">
-                  <div class="text-2xl font-bold text-nexus-accent">${value}</div>
-                  <div class="text-gray-400 capitalize">${key}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        ` : ''}
-        
-        <div class="flex space-x-4">
-          <button 
-            onclick="app.addToCart(${product.id})" 
-            class="flex-1 bg-nexus-accent hover:bg-nexus-accent/80 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2"
-          >
-            <i class="fas fa-shopping-bag"></i>
-            <span>Add to Cart - $${product.price}</span>
-          </button>
-          
-          <button class="border border-nexus-gray text-gray-300 hover:text-white hover:border-nexus-accent px-6 py-3 rounded-lg transition-colors">
-            <i class="far fa-heart"></i>
-          </button>
-        </div>
-        
-        <div class="bg-nexus-gray rounded-lg p-4">
-          <div class="flex items-center justify-between text-sm">
-            <span class="text-gray-400">Stock Status:</span>
-            <span class="${product.inStock ? 'text-green-400' : 'text-red-400'} font-medium">
-              ${product.inStock ? `In Stock (${product.quantity || 'Limited'})` : 'Out of Stock'}
-            </span>
-          </div>
-        </div>
-      </div>
-    `;
+    const filteredProducts = this.products.filter(product => 
+      product.name.toLowerCase().includes(query.toLowerCase()) ||
+      product.description.toLowerCase().includes(query.toLowerCase()) ||
+      product.categoryDisplay.toLowerCase().includes(query.toLowerCase())
+    );
+
+    this.renderFilteredProducts(filteredProducts);
   }
 
-  renderCartPage() {
-    const container = document.getElementById('cart-container');
-    const emptyCart = document.getElementById('empty-cart');
-    const cartItems = document.getElementById('cart-items');
-    const cartSummary = document.getElementById('cart-summary');
+  renderFilteredProducts(products) {
+    const grid = document.getElementById('products-grid');
+    const noProducts = document.getElementById('no-products');
     
-    if (this.cart.length === 0) {
-      emptyCart?.classList.remove('hidden');
-      cartItems?.classList.add('hidden');
-      cartSummary?.classList.add('hidden');
-    } else {
-      emptyCart?.classList.add('hidden');
-      cartItems?.classList.remove('hidden');
-      cartSummary?.classList.remove('hidden');
-      
-      if (cartItems) {
-        cartItems.innerHTML = this.cart.map(item => this.createCartItemHTML(item)).join('');
+    if (!grid || !noProducts) return;
+
+    if (products.length === 0) {
+      grid.classList.add('hidden');
+      noProducts.classList.remove('hidden');
+      document.querySelector('#no-products h3').textContent = 'No Products Found';
+      document.querySelector('#no-products p').textContent = 'Try adjusting your search terms or browse our categories.';
+      return;
+    }
+
+    noProducts.classList.add('hidden');
+    grid.classList.remove('hidden');
+    grid.innerHTML = products.map(product => this.createProductCard(product)).join('');
+    this.attachProductCardListeners();
+    this.updateProductCount(products.length);
+  }
+
+  updateProductCount(count = null) {
+    const countElement = document.getElementById('product-count');
+    if (!countElement) return;
+
+    if (count === null) {
+      let filteredProducts = this.products;
+      if (this.currentCategory) {
+        filteredProducts = this.products.filter(p => p.category === this.currentCategory);
       }
-      
-      this.updateCartSummary();
+      count = filteredProducts.length;
     }
+
+    countElement.textContent = `${count} product${count !== 1 ? 's' : ''} found`;
   }
 
-  createCartItemHTML(item) {
-    const product = this.products.find(p => p.id === item.id);
-    if (!product) return '';
-
-    return `
-      <div class="bg-nexus-gray rounded-lg p-6">
-        <div class="flex items-center space-x-4">
-          <div class="w-20 h-20 bg-nexus-dark rounded-lg flex items-center justify-center">
-            <i class="fas fa-image text-2xl text-gray-500"></i>
-          </div>
-          
-          <div class="flex-1">
-            <h3 class="text-lg font-semibold text-white">${product.name}</h3>
-            <p class="text-gray-400">${product.categoryDisplay}</p>
-            <p class="text-nexus-accent font-semibold">$${product.price}</p>
-          </div>
-          
-          <div class="flex items-center space-x-3">
-            <button onclick="app.updateQuantity(${item.id}, ${item.quantity - 1})" class="w-8 h-8 bg-nexus-black rounded text-white hover:bg-nexus-accent transition-colors">
-              <i class="fas fa-minus text-xs"></i>
-            </button>
-            
-            <span class="w-12 text-center text-white font-medium">${item.quantity}</span>
-            
-            <button onclick="app.updateQuantity(${item.id}, ${item.quantity + 1})" class="w-8 h-8 bg-nexus-black rounded text-white hover:bg-nexus-accent transition-colors">
-              <i class="fas fa-plus text-xs"></i>
-            </button>
-          </div>
-          
-          <button onclick="app.removeFromCart(${item.id})" class="text-gray-400 hover:text-red-400 transition-colors">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      </div>
-    `;
-  }
-
-  // Cart Management
   addToCart(productId) {
     const product = this.products.find(p => p.id === productId);
     if (!product) return;
@@ -323,89 +264,36 @@ class NexusCard {
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      this.cart.push({ id: productId, quantity: 1 });
+      this.cart.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        category: product.categoryDisplay,
+        quantity: 1
+      });
     }
 
-    this.saveCart();
-    this.updateCartUI();
+    localStorage.setItem('duelistCart', JSON.stringify(this.cart));
+    this.updateCartCount();
     this.showNotification(`${product.name} added to cart!`, 'success');
   }
 
-  removeFromCart(productId) {
-    this.cart = this.cart.filter(item => item.id !== productId);
-    this.saveCart();
-    this.updateCartUI();
-    
-    if (this.currentPage === 'cart') {
-      this.renderCartPage();
-    }
-  }
-
-  updateQuantity(productId, quantity) {
-    if (quantity <= 0) {
-      this.removeFromCart(productId);
-      return;
-    }
-
-    const item = this.cart.find(item => item.id === productId);
-    if (item) {
-      item.quantity = quantity;
-      this.saveCart();
-      this.updateCartUI();
+  updateCartCount() {
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+      const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartCount.textContent = totalItems;
       
-      if (this.currentPage === 'cart') {
-        this.renderCartPage();
+      if (totalItems > 0) {
+        cartCount.classList.remove('hidden');
+      } else {
+        cartCount.classList.add('hidden');
       }
     }
   }
 
-  saveCart() {
-    localStorage.setItem('nexus-cart', JSON.stringify(this.cart));
-  }
-
-  updateCartUI() {
-    const cartCount = this.cart.reduce((total, item) => total + item.quantity, 0);
-    const cartBadge = document.getElementById('cart-count');
-    if (cartBadge) {
-      cartBadge.textContent = cartCount;
-      cartBadge.style.display = cartCount > 0 ? 'flex' : 'none';
-    }
-  }
-
-  updateCartSummary() {
-    const subtotal = this.cart.reduce((total, item) => {
-      const product = this.products.find(p => p.id === item.id);
-      return total + (product ? product.price * item.quantity : 0);
-    }, 0);
-
-    const tax = subtotal * 0.08; // 8% tax
-    const total = subtotal + tax;
-
-    document.getElementById('cart-subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('cart-tax').textContent = `$${tax.toFixed(2)}`;
-    document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
-  }
-
-  // Utility Methods
-  getProductIdFromURL() {
-    const path = window.location.pathname;
-    const matches = path.match(/\/product\/(\d+)/);
-    return matches ? parseInt(matches[1]) : null;
-  }
-
-  getCategoryFromURL() {
-    const path = window.location.pathname;
-    const matches = path.match(/\/shop\/(.+)/);
-    return matches ? matches[1] : null;
-  }
-
-  goToProduct(productId) {
-    window.location.href = `/product/${productId}`;
-  }
-
-  // Event Binding
-  bindGlobalEvents() {
-    // Mobile menu toggle
+  setupMobileMenu() {
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     
@@ -414,61 +302,50 @@ class NexusCard {
         mobileMenu.classList.toggle('hidden');
       });
     }
-
-    // Filter toggle (shop page)
-    const filterToggle = document.getElementById('filter-toggle');
-    const filterSidebar = document.getElementById('filter-sidebar');
-    
-    if (filterToggle && filterSidebar) {
-      filterToggle.addEventListener('click', () => {
-        filterSidebar.classList.toggle('hidden');
-        filterSidebar.classList.toggle('lg:block');
-      });
-    }
   }
 
-  initShopFilters() {
-    // Placeholder for filter functionality
-    // In a real app, this would handle filter changes
-  }
-
-  initStatsCounters() {
-    // Animate stats counters on homepage
-    const statCounters = document.querySelectorAll('.stat-counter');
-    statCounters.forEach(counter => {
-      counter.classList.add('animate-slide-in');
-    });
-  }
-
-  showNotification(message, type = 'success') {
+  showNotification(message, type = 'info') {
     const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-      <div class="flex items-center space-x-3">
-        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-        <span>${message}</span>
-      </div>
-    `;
-
+    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ${
+      type === 'success' ? 'bg-green-600' : 
+      type === 'error' ? 'bg-red-600' : 'bg-duelist-accent'
+    } text-white`;
+    
+    notification.textContent = message;
     document.body.appendChild(notification);
-
-    // Show notification
-    setTimeout(() => notification.classList.add('show'), 100);
-
-    // Hide and remove notification
+    
     setTimeout(() => {
-      notification.classList.remove('show');
+      notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    setTimeout(() => {
+      notification.classList.add('translate-x-full');
       setTimeout(() => {
-        if (document.body.contains(notification)) {
-          document.body.removeChild(notification);
-        }
+        document.body.removeChild(notification);
       }, 300);
     }, 3000);
   }
+
+  showError(message) {
+    const noProducts = document.getElementById('no-products');
+    if (noProducts) {
+      noProducts.querySelector('h3').textContent = 'Error Loading Products';
+      noProducts.querySelector('p').textContent = message;
+      noProducts.classList.remove('hidden');
+    }
+  }
 }
 
-// Initialize the application
-let app;
+// Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  app = new NexusCard();
+  new DuelistEmporiumApp();
 });
+
+// Handle category navigation
+window.navigateToCategory = (category) => {
+  if (category) {
+    window.location.href = `/shop/${category}`;
+  } else {
+    window.location.href = '/shop';
+  }
+};
