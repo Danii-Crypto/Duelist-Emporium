@@ -1,0 +1,139 @@
+/* Custom styles for Duelist Emporium */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e94560;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c73650;
+}
+
+/* Gradient text animation */
+@keyframes gradient-x {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 3s ease infinite;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(233, 69, 96, 0.3);
+}
+
+/* Button glow effect */
+.btn-glow:hover {
+  box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+}
+
+/* Loading animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
+  }
+}
+
+.loading {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Product card styles */
+.product-card {
+  background: linear-gradient(145deg, #1f1f3a, #16213e);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  border-color: rgba(233, 69, 96, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(233, 69, 96, 0.2);
+}
+
+/* Price tag styling */
+.price-tag {
+  background: linear-gradient(135deg, #e94560, #f39c12);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+}
+
+/* Category badge */
+.category-badge {
+  background: rgba(233, 69, 96, 0.1);
+  border: 1px solid rgba(233, 69, 96, 0.3);
+  color: #e94560;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Accessibility improvements */
+.focus-visible:focus {
+  outline: 2px solid #e94560;
+  outline-offset: 2px;
+}
+
+/* Animation delays for staggered loading */
+.animate-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-3 {
+  animation-delay: 0.3s;
+}
+
+.animate-delay-4 {
+  animation-delay: 0.4s;
+}
