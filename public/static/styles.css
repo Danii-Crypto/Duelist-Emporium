@@ -1,145 +1,193 @@
-/* Cyberpunk/Web3 Styles for Duelist Emporium */
+/* NexusCard TCG Marketplace Styles */
 
-/* Smooth scrolling with easing */
+/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Cyberpunk scrollbar */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0f;
-  border-radius: 6px;
+  background: #1a1a1a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #00d4ff, #b300ff);
-  border-radius: 6px;
-  border: 2px solid #0a0a0f;
+  background: #ff6b35;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, #00ffff, #ff0080);
-  box-shadow: 0 0 10px #00d4ff;
+  background: #e55a2b;
 }
 
-/* Glow animations */
-@keyframes glow-pulse {
+/* Card glow animation */
+@keyframes card-glow {
   from {
-    box-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff, 0 0 40px #00d4ff;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
   }
   to {
-    box-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+    box-shadow: 0 0 40px rgba(255, 107, 53, 0.8), 0 0 60px rgba(255, 107, 53, 0.3);
   }
 }
 
-@keyframes neon-flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
-    opacity: 1;
-    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
-  }
-  20%, 24%, 55% {
-    opacity: 0.4;
-    text-shadow: none;
-  }
-}
-
-@keyframes card-float {
+@keyframes float {
   0%, 100% {
-    transform: translateY(0px) rotateY(0deg);
+    transform: translateY(0px);
   }
   50% {
-    transform: translateY(-20px) rotateY(5deg);
+    transform: translateY(-10px);
   }
 }
 
-@keyframes scan-line {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes matrix-rain {
-  0% {
-    transform: translateY(-100vh);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
-}
-
-@keyframes glitch-h {
-  0%, 100% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-}
-
-@keyframes data-stream {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  10%, 90% {
+@keyframes pulse-soft {
+  0%, 100% {
     opacity: 1;
   }
-  100% {
-    transform: translateY(100%);
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%);
     opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
 /* Utility classes */
-.animate-glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite alternate;
+.animate-card-glow {
+  animation: card-glow 2s ease-in-out infinite alternate;
 }
 
-.animate-neon-flicker {
-  animation: neon-flicker 1.5s ease-in-out infinite alternate;
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
 
-.animate-card-float {
-  animation: card-float 6s ease-in-out infinite;
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
 }
 
-.animate-scan-line {
-  animation: scan-line 2s linear infinite;
+.animate-slide-in {
+  animation: slide-in 0.5s ease-out;
 }
 
-.animate-spin-slow {
-  animation: spin 3s linear infinite;
-}
-
-.animate-glitch {
-  animation: glitch-h 0.5s infinite;
-}
-
-/* Cyberpunk card effects */
-.cyber-card {
-  background: linear-gradient(145deg, #1a0d2e, #0d1b2a);
-  border: 1px solid rgba(0, 212, 255, 0.3);
+/* Product card styles */
+.product-card {
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border: 1px solid rgba(255, 107, 53, 0.2);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
-.cyber-card:hover {
-  border-color: rgba(0, 212, 255, 0.8);
-  transform: translateY(-8px) rotateX(5deg);
-  box-shadow: 
-    0 20px 40px rgba(0, 212, 255, 0.3),
-    0 0 20px rgba(179, 0, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+.product-card:hover {
+  border-color: rgba(255, 107, 53, 0.6);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(255, 107, 53, 0.2);
 }
 
-.cyber-card::before {
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.product-card:hover::before {
+  left: 100%;
+}
+
+/* Rarity colors for cards */
+.rarity-common { 
+  border-color: #94a3b8; 
+  box-shadow: 0 0 10px rgba(148, 163, 184, 0.3);
+}
+
+.rarity-uncommon { 
+  border-color: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+.rarity-rare { 
+  border-color: #3b82f6;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+.rarity-epic { 
+  border-color: #8b5cf6;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.rarity-legendary { 
+  border-color: #f59e0b;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.6);
+}
+
+.rarity-mythic { 
+  border-color: #10b981;
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.7);
+}
+
+/* Price styling */
+.price-current {
+  background: linear-gradient(135deg, #ff6b35, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.price-original {
+  color: #6b7280;
+  text-decoration: line-through;
+  font-size: 0.875rem;
+}
+
+/* Category badge styling */
+.category-badge {
+  background: rgba(255, 107, 53, 0.1);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  color: #ff6b35;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b35, #ffd700);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+}
+
+.btn-primary::before {
   content: '';
   position: absolute;
   top: 0;
@@ -150,199 +198,56 @@ html {
   transition: left 0.5s ease;
 }
 
-.cyber-card:hover::before {
+.btn-primary:hover::before {
   left: 100%;
 }
 
-/* Holographic product cards */
-.product-card {
-  background: linear-gradient(145deg, #0a0a0f, #1a0d2e);
-  border: 2px solid rgba(0, 212, 255, 0.2);
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-}
-
-.product-card:hover {
-  border-color: rgba(0, 212, 255, 0.8);
-  transform: translateY(-12px) scale(1.02);
-  box-shadow: 
-    0 25px 50px rgba(0, 212, 255, 0.4),
-    0 0 30px rgba(179, 0, 255, 0.3),
-    0 0 60px rgba(0, 255, 65, 0.1);
-}
-
-.product-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(0, 212, 255, 0.1) 0%, 
-    rgba(179, 0, 255, 0.1) 25%, 
-    transparent 50%, 
-    rgba(255, 0, 128, 0.1) 75%, 
-    rgba(0, 255, 65, 0.1) 100%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.product-card:hover::after {
-  opacity: 1;
-}
-
-/* Cyberpunk price tags */
-.cyber-price {
-  background: linear-gradient(135deg, #00d4ff, #b300ff);
-  color: #ffffff;
+.btn-secondary {
+  background: transparent;
+  color: #d1d5db;
+  border: 2px solid #374151;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
-  font-weight: 800;
-  font-family: 'Orbitron', monospace;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  box-shadow: 
-    0 4px 15px rgba(0, 212, 255, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.cyber-price::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: scan-line 3s linear infinite;
-}
-
-/* Category badges */
-.cyber-badge {
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.4);
-  color: #00d4ff;
-  padding: 0.25rem 1rem;
-  border-radius: 1rem;
-  font-size: 0.75rem;
   font-weight: 600;
-  font-family: 'Share Tech Mono', monospace;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  position: relative;
-  overflow: hidden;
-}
-
-.cyber-badge::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.2), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-}
-
-.cyber-badge:hover::before {
-  transform: translateX(100%);
-}
-
-/* Glowing buttons */
-.cyber-btn {
-  background: linear-gradient(135deg, #00d4ff, #b300ff);
-  border: none;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 0.5rem;
-  font-family: 'Orbitron', monospace;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
   transition: all 0.3s ease;
 }
 
-.cyber-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 10px 25px rgba(0, 212, 255, 0.4),
-    0 0 20px rgba(179, 0, 255, 0.3);
+.btn-secondary:hover {
+  border-color: #ff6b35;
+  color: #ff6b35;
+  background: rgba(255, 107, 53, 0.05);
 }
 
-.cyber-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.cyber-btn:hover::before {
-  left: 100%;
-}
-
-/* Terminal/Console styling */
-.terminal {
-  background: #0a0a0f;
-  border: 1px solid #00d4ff;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  font-family: 'Share Tech Mono', monospace;
-  color: #00ff41;
+/* Navigation styling */
+.nav-link {
   position: relative;
-  overflow: hidden;
+  text-decoration: none;
 }
 
-.terminal::before {
+.nav-link::after {
   content: '';
   position: absolute;
-  top: 0;
+  bottom: -4px;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 255, 65, 0.03) 2px,
-    rgba(0, 255, 65, 0.03) 4px
-  );
-  pointer-events: none;
+  width: 0;
+  height: 2px;
+  background: #ff6b35;
+  transition: width 0.3s ease;
 }
 
-/* Matrix digital rain effect */
-.matrix-bg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(179, 0, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, rgba(255, 0, 128, 0.05) 0%, transparent 50%);
-  animation: matrix-rain 20s linear infinite;
+.nav-link:hover::after {
+  width: 100%;
 }
 
-/* Accessibility improvements with cyberpunk styling */
-.focus-visible:focus {
-  outline: 2px solid #00d4ff;
-  outline-offset: 4px;
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+/* Form styling */
+input, textarea, select {
+  transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
 }
 
 /* Loading states */
@@ -360,64 +265,119 @@ html {
   height: 100%;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(0, 212, 255, 0.4), 
+    rgba(255, 107, 53, 0.3), 
     transparent
   );
-  animation: scan-line 1.5s ease-in-out infinite;
+  animation: shimmer 1.5s ease-in-out infinite;
 }
 
-/* Particle effects container */
-#particles-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
-.particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: #00d4ff;
-  border-radius: 50%;
-  animation: data-stream 10s linear infinite;
-  box-shadow: 0 0 6px #00d4ff;
+/* Notification styles */
+.notification {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  border: 1px solid #ff6b35;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
 }
 
-.particle:nth-child(2n) {
-  background: #b300ff;
-  box-shadow: 0 0 6px #b300ff;
-  animation-duration: 12s;
+.notification.show {
+  transform: translateX(0);
 }
 
-.particle:nth-child(3n) {
-  background: #00ff41;
-  box-shadow: 0 0 6px #00ff41;
-  animation-duration: 8s;
+.notification.success {
+  border-color: #22c55e;
+}
+
+.notification.error {
+  border-color: #ef4444;
+}
+
+.notification.warning {
+  border-color: #f59e0b;
+}
+
+/* Stats counter animation */
+.stat-counter {
+  display: inline-block;
+  animation: count-up 2s ease-out;
+}
+
+@keyframes count-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Accessibility improvements */
+.focus-visible:focus {
+  outline: 2px solid #ff6b35;
+  outline-offset: 2px;
 }
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
+  .product-card {
+    margin-bottom: 1rem;
+  }
+  
   .hero-title {
     font-size: 2.5rem;
   }
-  
-  .cyber-card {
-    margin: 0.5rem;
-  }
-  
-  .product-card:hover {
-    transform: translateY(-6px) scale(1.01);
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .product-card {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
   }
 }
 
-/* Dark mode enhancements */
-@media (prefers-color-scheme: dark) {
-  .cyber-card {
-    border-color: rgba(0, 212, 255, 0.4);
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .product-card {
+    border-width: 2px;
   }
   
-  .cyber-badge {
-    background: rgba(0, 212, 255, 0.15);
+  .btn-primary, .btn-secondary {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
