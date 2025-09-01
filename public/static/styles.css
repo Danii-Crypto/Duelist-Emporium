@@ -1,106 +1,399 @@
-/* Custom styles for Duelist Emporium */
+/* Cyberpunk/Web3 Styles for Duelist Emporium */
 
-/* Smooth scrolling */
+/* Smooth scrolling with easing */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Cyberpunk scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a2e;
+  background: #0a0a0f;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e94560;
-  border-radius: 4px;
+  background: linear-gradient(45deg, #00d4ff, #b300ff);
+  border-radius: 6px;
+  border: 2px solid #0a0a0f;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c73650;
+  background: linear-gradient(45deg, #00ffff, #ff0080);
+  box-shadow: 0 0 10px #00d4ff;
 }
 
-/* Gradient text animation */
-@keyframes gradient-x {
+/* Glow animations */
+@keyframes glow-pulse {
+  from {
+    box-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff, 0 0 40px #00d4ff;
+  }
+  to {
+    box-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+  }
+}
+
+@keyframes neon-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+    text-shadow: none;
+  }
+}
+
+@keyframes card-float {
   0%, 100% {
-    background-size: 200% 200%;
-    background-position: left center;
+    transform: translateY(0px) rotateY(0deg);
   }
   50% {
-    background-size: 200% 200%;
-    background-position: right center;
+    transform: translateY(-20px) rotateY(5deg);
   }
 }
 
-.animate-gradient-x {
-  animation: gradient-x 3s ease infinite;
+@keyframes scan-line {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
-/* Card hover effects */
-.card-hover {
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100vh);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes glitch-h {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+@keyframes data-stream {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10%, 90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Utility classes */
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+.animate-neon-flicker {
+  animation: neon-flicker 1.5s ease-in-out infinite alternate;
+}
+
+.animate-card-float {
+  animation: card-float 6s ease-in-out infinite;
+}
+
+.animate-scan-line {
+  animation: scan-line 2s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+.animate-glitch {
+  animation: glitch-h 0.5s infinite;
+}
+
+/* Cyberpunk card effects */
+.cyber-card {
+  background: linear-gradient(145deg, #1a0d2e, #0d1b2a);
+  border: 1px solid rgba(0, 212, 255, 0.3);
   transition: all 0.3s ease;
-  transform: translateY(0);
+  position: relative;
+  overflow: hidden;
 }
 
-.card-hover:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(233, 69, 96, 0.3);
+.cyber-card:hover {
+  border-color: rgba(0, 212, 255, 0.8);
+  transform: translateY(-8px) rotateX(5deg);
+  box-shadow: 
+    0 20px 40px rgba(0, 212, 255, 0.3),
+    0 0 20px rgba(179, 0, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Button glow effect */
-.btn-glow:hover {
-  box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
 }
 
-/* Loading animation */
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
-  }
+.cyber-card:hover::before {
+  left: 100%;
 }
 
-.loading {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Product card styles */
+/* Holographic product cards */
 .product-card {
-  background: linear-gradient(145deg, #1f1f3a, #16213e);
-  border: 1px solid rgba(233, 69, 96, 0.2);
-  transition: all 0.3s ease;
+  background: linear-gradient(145deg, #0a0a0f, #1a0d2e);
+  border: 2px solid rgba(0, 212, 255, 0.2);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
 .product-card:hover {
-  border-color: rgba(233, 69, 96, 0.5);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(233, 69, 96, 0.2);
+  border-color: rgba(0, 212, 255, 0.8);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 
+    0 25px 50px rgba(0, 212, 255, 0.4),
+    0 0 30px rgba(179, 0, 255, 0.3),
+    0 0 60px rgba(0, 255, 65, 0.1);
 }
 
-/* Price tag styling */
-.price-tag {
-  background: linear-gradient(135deg, #e94560, #f39c12);
-  color: white;
-  padding: 0.5rem 1rem;
+.product-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 212, 255, 0.1) 0%, 
+    rgba(179, 0, 255, 0.1) 25%, 
+    transparent 50%, 
+    rgba(255, 0, 128, 0.1) 75%, 
+    rgba(0, 255, 65, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.product-card:hover::after {
+  opacity: 1;
+}
+
+/* Cyberpunk price tags */
+.cyber-price {
+  background: linear-gradient(135deg, #00d4ff, #b300ff);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+  font-weight: 800;
+  font-family: 'Orbitron', monospace;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 4px 15px rgba(0, 212, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Category badge */
-.category-badge {
-  background: rgba(233, 69, 96, 0.1);
-  border: 1px solid rgba(233, 69, 96, 0.3);
-  color: #e94560;
-  padding: 0.25rem 0.75rem;
+.cyber-price::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: scan-line 3s linear infinite;
+}
+
+/* Category badges */
+.cyber-badge {
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  color: #00d4ff;
+  padding: 0.25rem 1rem;
   border-radius: 1rem;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: 'Share Tech Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.cyber-badge:hover::before {
+  transform: translateX(100%);
+}
+
+/* Glowing buttons */
+.cyber-btn {
+  background: linear-gradient(135deg, #00d4ff, #b300ff);
+  border: none;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cyber-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 25px rgba(0, 212, 255, 0.4),
+    0 0 20px rgba(179, 0, 255, 0.3);
+}
+
+.cyber-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.cyber-btn:hover::before {
+  left: 100%;
+}
+
+/* Terminal/Console styling */
+.terminal {
+  background: #0a0a0f;
+  border: 1px solid #00d4ff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  color: #00ff41;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.03) 2px,
+    rgba(0, 255, 65, 0.03) 4px
+  );
+  pointer-events: none;
+}
+
+/* Matrix digital rain effect */
+.matrix-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(179, 0, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(255, 0, 128, 0.05) 0%, transparent 50%);
+  animation: matrix-rain 20s linear infinite;
+}
+
+/* Accessibility improvements with cyberpunk styling */
+.focus-visible:focus {
+  outline: 2px solid #00d4ff;
+  outline-offset: 4px;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* Loading states */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 212, 255, 0.4), 
+    transparent
+  );
+  animation: scan-line 1.5s ease-in-out infinite;
+}
+
+/* Particle effects container */
+#particles-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #00d4ff;
+  border-radius: 50%;
+  animation: data-stream 10s linear infinite;
+  box-shadow: 0 0 6px #00d4ff;
+}
+
+.particle:nth-child(2n) {
+  background: #b300ff;
+  box-shadow: 0 0 6px #b300ff;
+  animation-duration: 12s;
+}
+
+.particle:nth-child(3n) {
+  background: #00ff41;
+  box-shadow: 0 0 6px #00ff41;
+  animation-duration: 8s;
 }
 
 /* Mobile responsive adjustments */
@@ -109,31 +402,22 @@ html {
     font-size: 2.5rem;
   }
   
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  .cyber-card {
+    margin: 0.5rem;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-6px) scale(1.01);
   }
 }
 
-/* Accessibility improvements */
-.focus-visible:focus {
-  outline: 2px solid #e94560;
-  outline-offset: 2px;
-}
-
-/* Animation delays for staggered loading */
-.animate-delay-1 {
-  animation-delay: 0.1s;
-}
-
-.animate-delay-2 {
-  animation-delay: 0.2s;
-}
-
-.animate-delay-3 {
-  animation-delay: 0.3s;
-}
-
-.animate-delay-4 {
-  animation-delay: 0.4s;
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .cyber-card {
+    border-color: rgba(0, 212, 255, 0.4);
+  }
+  
+  .cyber-badge {
+    background: rgba(0, 212, 255, 0.15);
+  }
 }
