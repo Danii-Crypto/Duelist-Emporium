@@ -21,247 +21,355 @@ interface ShopPageProps {
 }
 
 export function ShopPage({ category, products = [] }: ShopPageProps) {
+  const getCategoryTitle = (cat?: string) => {
+    if (!cat) return "Complete Collection"
+    return cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  }
+
+  const getCategoryIcon = (cat?: string) => {
+    switch(cat) {
+      case 'single-deck-boxes': return 'fas fa-box'
+      case 'multi-deck-boxes': return 'fas fa-boxes'
+      case 'binders': return 'fas fa-book'
+      case 'card-sleeves': return 'fas fa-layer-group'
+      case 'playmats': return 'fas fa-map'
+      case 'storage': return 'fas fa-archive'
+      case 'booster-cases': return 'fas fa-cube'
+      case 'accessories': return 'fas fa-dice'
+      default: return 'fas fa-shopping-bag'
+    }
+  }
+
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-duelist-dark via-duelist-darker to-duelist-purple py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl lg:text-6xl font-bold text-duelist-accent mb-4">
-            Premium Collection
-          </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Discover championship-grade accessories designed for legendary duelists
-          </p>
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      {/* Enhanced Hero Section */}
+      <section className="relative bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900 py-20 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffd700' fill-opacity='0.1'%3E%3Cpath d='M40 40V20H20V0H0v20h20v20z'/%3E%3C/g%3E%3C/svg%3E")`,
+          }}></div>
         </div>
-      </div>
 
-      {/* Search and Filter Section */}
-      <div className="bg-duelist-dark py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-6 items-center justify-center mb-8">
-            {/* Search Bar */}
-            <div className="relative flex-1 max-w-md">
-              <input
-                type="text"
-                placeholder="Search products..."
-                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-duelist-accent"
-              />
-              <i className="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-6">
+            {category && (
+              <div className="inline-flex items-center bg-gradient-to-r from-yellow-400/10 to-orange-500/10 border border-yellow-400/20 rounded-full px-6 py-2 mb-4">
+                <i className={`${getCategoryIcon(category)} text-yellow-400 mr-2`}></i>
+                <span className="text-yellow-400 text-sm font-semibold">{getCategoryTitle(category)}</span>
+              </div>
+            )}
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 mb-6 leading-tight">
+            {getCategoryTitle(category)}
+          </h1>
+          
+          <p className="text-xl lg:text-2xl text-slate-300 max-w-4xl mx-auto mb-6 leading-relaxed">
+            {category 
+              ? `Discover our premium ${getCategoryTitle(category).toLowerCase()} collection designed for competitive play` 
+              : "Explore our complete collection of championship-grade Yu-Gi-Oh accessories"
+            }
+          </p>
+          
+          <div className="flex items-center justify-center space-x-8 text-slate-400">
+            <div className="flex items-center space-x-2">
+              <i className="fas fa-shield-alt text-green-400"></i>
+              <span>Premium Quality</span>
             </div>
-            
-            {/* Sort Dropdown */}
-            <select className="bg-gray-800 border border-gray-600 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-duelist-accent">
-              <option>Sort by</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-              <option>Newest First</option>
-              <option>Best Rated</option>
-            </select>
+            <div className="flex items-center space-x-2">
+              <i className="fas fa-shipping-fast text-blue-400"></i>
+              <span>Fast Shipping</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <i className="fas fa-star text-yellow-400"></i>
+              <span>4.9★ Rating</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Filter Section */}
+      <section className="bg-slate-800/50 backdrop-blur py-8 border-b border-slate-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Search and Sort */}
+          <div className="flex flex-col lg:flex-row gap-6 items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 flex-1">
+              {/* Search Bar */}
+              <div className="relative flex-1 max-w-md">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full bg-slate-700/50 border border-slate-600 rounded-2xl px-6 py-4 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all"
+                />
+                <i className="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+              </div>
+              
+              {/* Sort Dropdown */}
+              <select className="bg-slate-700/50 border border-slate-600 text-white px-6 py-4 rounded-2xl focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all">
+                <option>Sort by Relevance</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Newest First</option>
+                <option>Best Rated</option>
+                <option>Most Popular</option>
+              </select>
+            </div>
+
+            {/* Product Count */}
+            <div className="text-slate-400">
+              <span className="font-semibold text-white">{products.length}</span> products found
+            </div>
           </div>
 
-          {/* Product Count */}
-          <div className="text-center mb-6">
-            <span id="product-count" className="text-gray-400">{products.length} products found</span>
-          </div>
-
-          {/* Category Filter Buttons */}
-          <div className="flex flex-wrap gap-3 justify-center mb-8">
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                !category ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap gap-3 justify-center">
+            <a 
+              href="/shop"
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                !category 
+                  ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black shadow-lg' 
+                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border border-slate-600'
               }`}
-              data-category=""
             >
               <i className="fas fa-th-large mr-2"></i>
               All Products
-            </button>
+            </a>
             
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                category === 'single-deck-boxes' ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
+            <a 
+              href="/shop/single-deck-boxes"
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                category === 'single-deck-boxes' 
+                  ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black shadow-lg' 
+                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border border-slate-600'
               }`}
-              data-category="single-deck-boxes"
             >
               <i className="fas fa-box mr-2"></i>
               Single Deck Boxes
-            </button>
+            </a>
             
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                category === 'multi-deck-boxes' ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
+            <a 
+              href="/shop/multi-deck-boxes"
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                category === 'multi-deck-boxes' 
+                  ? 'bg-gradient-to-r from-purple-400 to-pink-500 text-white shadow-lg' 
+                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border border-slate-600'
               }`}
-              data-category="multi-deck-boxes"
             >
               <i className="fas fa-boxes mr-2"></i>
               Multi Deck Boxes
-            </button>
+            </a>
             
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                category === 'binders' ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
+            <a 
+              href="/shop/binders"
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                category === 'binders' 
+                  ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-black shadow-lg' 
+                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border border-slate-600'
               }`}
-              data-category="binders"
             >
               <i className="fas fa-book mr-2"></i>
               Binders
-            </button>
+            </a>
             
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                category === 'card-sleeves' ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
+            <a 
+              href="/shop/card-sleeves"
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                category === 'card-sleeves' 
+                  ? 'bg-gradient-to-r from-blue-400 to-cyan-500 text-white shadow-lg' 
+                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border border-slate-600'
               }`}
-              data-category="card-sleeves"
             >
               <i className="fas fa-layer-group mr-2"></i>
               Card Sleeves
-            </button>
+            </a>
             
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                category === 'playmats' ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
+            <a 
+              href="/shop/accessories"
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                category === 'accessories' 
+                  ? 'bg-gradient-to-r from-indigo-400 to-purple-500 text-white shadow-lg' 
+                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border border-slate-600'
               }`}
-              data-category="playmats"
-            >
-              <i className="fas fa-map mr-2"></i>
-              Playmats
-            </button>
-            
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                category === 'storage' ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
-              }`}
-              data-category="storage"
-            >
-              <i className="fas fa-archive mr-2"></i>
-              Storage
-            </button>
-          </div>
-
-          {/* Second Row of Categories */}
-          <div className="flex flex-wrap gap-3 justify-center mb-12">
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                category === 'booster-cases' ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
-              }`}
-              data-category="booster-cases"
-            >
-              <i className="fas fa-cube mr-2"></i>
-              Booster Cases
-            </button>
-            
-            <button 
-              className={`category-btn px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                category === 'accessories' ? 'bg-duelist-accent text-black' : 'bg-gray-800 text-white hover:bg-gray-700'
-              }`}
-              data-category="accessories"
             >
               <i className="fas fa-dice mr-2"></i>
               Accessories
-            </button>
+            </a>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Products Grid */}
-      <div className="bg-duelist-darker py-12">
+      {/* Enhanced Products Grid */}
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Products Grid Container */}
           {products.length === 0 ? (
+            /* Empty State */
             <div className="text-center py-20">
-              <div className="mb-6">
-                <i className="fas fa-box-open text-6xl text-duelist-accent opacity-50"></i>
+              <div className="mb-8">
+                <div className="w-32 h-32 bg-gradient-to-br from-slate-700 to-slate-800 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <i className="fas fa-box-open text-5xl text-slate-400"></i>
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">No Products Found</h3>
-              <p className="text-gray-400 mb-6">
-                {category ? `No products found in ${category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} category` : 'No products available'}
+              <h3 className="text-3xl font-bold text-white mb-4">No Products Found</h3>
+              <p className="text-slate-400 mb-8 max-w-md mx-auto">
+                {category 
+                  ? `We're currently out of stock for ${getCategoryTitle(category).toLowerCase()}. Check back soon for new arrivals!`
+                  : 'No products available at the moment. Please check back later.'}
               </p>
+              <a 
+                href="/shop" 
+                className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-8 py-4 rounded-2xl font-bold hover:shadow-xl hover:shadow-yellow-500/30 transition-all"
+              >
+                <i className="fas fa-arrow-left mr-2"></i>
+                Browse All Products
+              </a>
             </div>
           ) : (
-            <div id="products-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            /* Products Grid */
+            <div id="products-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {products.map((product) => (
-                <div key={product.id} className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group hover:scale-105">
-                  <div className="aspect-w-1 aspect-h-1 bg-gray-900 relative overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.src = '/static/placeholder-card.jpg'
-                        console.log(`Failed to load image for ${product.name}: ${product.image}`)
-                      }}
-                    />
-                    <div className="absolute top-3 right-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                        product.rarity === 'Epic' ? 'bg-purple-600 text-white' :
-                        product.rarity === 'Ultra Rare' ? 'bg-duelist-accent text-black' :
-                        'bg-blue-600 text-white'
-                      }`}>
-                        {product.rarity}
-                      </span>
-                    </div>
-                    {!product.inStock && (
-                      <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">Out of Stock</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-medium text-duelist-accent uppercase tracking-wide">
-                        {product.categoryDisplay}
-                      </span>
-                      <div className="flex items-center space-x-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <i key={star} className="fas fa-star text-duelist-accent text-xs"></i>
-                        ))}
-                      </div>
-                    </div>
+                <div key={product.id} className="group relative">
+                  {/* Product Card */}
+                  <div className="bg-gradient-to-b from-slate-800 to-slate-900 border border-slate-700 rounded-3xl overflow-hidden hover:border-yellow-400/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/20">
                     
-                    <h3 className="text-white font-bold text-lg mb-2 line-clamp-2">{product.name}</h3>
-                    
-                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">{product.description}</p>
-                    
-                    {/* Stats */}
-                    <div className="space-y-2 mb-4">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-400">Protection</span>
-                        <span className="text-xs text-duelist-accent font-bold">{product.stats.protection}%</span>
-                      </div>
-                      <div className="w-full bg-gray-700 rounded-full h-1.5">
-                        <div 
-                          className="bg-duelist-accent h-1.5 rounded-full" 
-                          style={{width: `${product.stats.protection}%`}}
-                        ></div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-2xl font-bold text-duelist-accent">
-                          ${product.price}
+                    {/* Product Image Container */}
+                    <div className="relative aspect-square bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
+                      {/* Enhanced Image Display with Multiple Fallbacks */}
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        loading="lazy"
+                        onError={(e) => {
+                          // If main image fails, try to set background image as backup
+                          const target = e.target as HTMLImageElement;
+                          const container = target.parentElement;
+                          if (container) {
+                            const fallback = container.querySelector('.image-fallback') as HTMLElement;
+                            if (fallback) {
+                              fallback.style.opacity = '1';
+                            }
+                          }
+                        }}
+                      />
+                      
+                      {/* CSS Background Image Fallback */}
+                      <div 
+                        className="image-fallback absolute inset-0 w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-700 opacity-0"
+                        style={{backgroundImage: `url(${product.image})`}}
+                        title={product.name}
+                      ></div>
+
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      
+                      {/* Badges */}
+                      <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
+                        {/* Rarity Badge */}
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
+                          product.rarity === 'Epic' ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white' :
+                          product.rarity === 'Ultra Rare' ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black' :
+                          'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
+                        }`}>
+                          {product.rarity}
                         </span>
-                        <div className="text-xs text-gray-400">
-                          Stock: {product.quantity}
+
+                        {/* Stock Status */}
+                        {!product.inStock && (
+                          <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            Out of Stock
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Quick View Button */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <button 
+                          className="bg-white/20 backdrop-blur border border-white/30 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-white/30 transition-all transform translate-y-4 group-hover:translate-y-0"
+                          onClick={() => window.location.href = `/product/${product.id}`}
+                        >
+                          Quick View
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {/* Product Info */}
+                    <div className="p-6">
+                      {/* Category and Rating */}
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-xs font-semibold text-yellow-400 uppercase tracking-wider">
+                          {product.categoryDisplay}
+                        </span>
+                        <div className="flex items-center space-x-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <i key={star} className="fas fa-star text-yellow-400 text-xs"></i>
+                          ))}
                         </div>
                       </div>
                       
-                      <button 
-                        className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                          product.inStock 
-                            ? 'bg-duelist-accent hover:bg-duelist-gold text-black' 
-                            : 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                        }`}
-                        disabled={!product.inStock}
-                        onClick={() => {
-                          if (product.inStock) {
-                            window.location.href = `/product/${product.id}`
-                          }
-                        }}
-                      >
-                        {product.inStock ? 'View Details' : 'Out of Stock'}
-                      </button>
+                      {/* Product Name */}
+                      <h3 className="text-white font-bold text-lg mb-3 line-clamp-2 group-hover:text-yellow-400 transition-colors">
+                        {product.name}
+                      </h3>
+                      
+                      {/* Description */}
+                      <p className="text-slate-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+                        {product.description}
+                      </p>
+                      
+                      {/* Enhanced Stats */}
+                      <div className="mb-6">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Protection Rating</span>
+                          <span className="text-sm font-bold text-yellow-400">{product.stats.protection}%</span>
+                        </div>
+                        <div className="w-full bg-slate-700 rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-yellow-400 to-orange-500 h-2 rounded-full transition-all duration-500" 
+                            style={{width: `${product.stats.protection}%`}}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      {/* Price and Action */}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-3xl font-black text-white">
+                            ${product.price}
+                          </span>
+                          <div className="text-xs text-slate-400 mt-1">
+                            {product.inStock ? `${product.quantity} in stock` : 'Out of stock'}
+                          </div>
+                        </div>
+                        
+                        <div className="flex space-x-2">
+                          <button 
+                            className={`flex-1 px-4 py-3 rounded-2xl font-bold text-sm transition-all duration-300 ${
+                              product.inStock 
+                                ? 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black hover:shadow-lg hover:shadow-yellow-500/30 hover:scale-105' 
+                                : 'bg-slate-600 text-slate-400 cursor-not-allowed'
+                            }`}
+                            disabled={!product.inStock}
+                            onClick={() => {
+                              if (product.inStock && typeof window !== 'undefined' && window.addToCart) {
+                                window.addToCart(product.id, product.name, product.price, product.image);
+                              }
+                            }}
+                          >
+                            {product.inStock ? (
+                              <>
+                                <i className="fas fa-cart-plus mr-2"></i>
+                                Add to Cart
+                              </>
+                            ) : (
+                              <>
+                                <i className="fas fa-ban mr-2"></i>
+                                Out of Stock
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -269,16 +377,24 @@ export function ShopPage({ category, products = [] }: ShopPageProps) {
             </div>
           )}
 
-          {/* Load More Button - Hidden for now since we're showing all products */}
-          {products.length > 12 && (
-            <div className="text-center mt-12">
-              <p className="text-gray-400 text-sm">
-                Showing all {products.length} products
+          {/* Results Summary */}
+          {products.length > 0 && (
+            <div className="text-center mt-16 py-8 border-t border-slate-700">
+              <p className="text-slate-400">
+                Showing <span className="font-semibold text-white">{products.length}</span> products
+                {category && (
+                  <span> in <span className="font-semibold text-yellow-400">{getCategoryTitle(category)}</span></span>
+                )}
               </p>
+              {products.length >= 12 && (
+                <p className="text-sm text-slate-500 mt-2">
+                  More products coming soon • Follow us for updates
+                </p>
+              )}
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   )
 }

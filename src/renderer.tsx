@@ -20,7 +20,7 @@ export const renderer = jsxRenderer(({ children, title = 'Duelist Emporium - Pre
         {/* Custom CSS */}
         <link href="/static/styles.css" rel="stylesheet" />
         
-        {/* Tailwind Custom Config - Duelist Emporium Theme */}
+        {/* Enhanced Tailwind Custom Config */}
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -28,15 +28,15 @@ export const renderer = jsxRenderer(({ children, title = 'Duelist Emporium - Pre
                 extend: {
                   colors: {
                     'duelist': {
-                      'dark': '#1a1a2e',
-                      'darker': '#16213e',
-                      'purple': '#7209b7',
-                      'blue': '#0f3460',
-                      'accent': '#fddb3a',
-                      'gold': '#fddb3a',
-                      'yellow': '#fddb3a',
-                      'dark-purple': '#16213e',
-                      'light-purple': '#533483'
+                      'dark': '#0f172a',
+                      'darker': '#020617',
+                      'purple': '#7c3aed',
+                      'blue': '#1e40af',
+                      'accent': '#fbbf24',
+                      'gold': '#f59e0b',
+                      'yellow': '#fde047',
+                      'dark-purple': '#581c87',
+                      'light-purple': '#8b5cf6'
                     },
                     'card': {
                       'common': '#94a3b8',
@@ -49,23 +49,28 @@ export const renderer = jsxRenderer(({ children, title = 'Duelist Emporium - Pre
                   },
                   fontFamily: {
                     'cyber': ['Orbitron', 'sans-serif'],
-                    'display': ['Exo 2', 'sans-serif'],
-                    'mono': ['Share Tech Mono', 'monospace']
+                    'display': ['Inter', 'Exo 2', 'sans-serif'],
+                    'mono': ['JetBrains Mono', 'Share Tech Mono', 'monospace']
                   },
                   animation: {
-                    'card-glow': 'card-glow 2s ease-in-out infinite alternate',
-                    'float': 'float 3s ease-in-out infinite',
-                    'pulse-soft': 'pulse-soft 2s ease-in-out infinite',
-                    'slide-in': 'slide-in 0.5s ease-out'
+                    'card-glow': 'card-glow 0.4s ease-out forwards',
+                    'float': 'float 4s ease-in-out infinite',
+                    'bounce-slow': 'bounce 2s infinite',
+                    'pulse-soft': 'pulse 3s ease-in-out infinite',
+                    'slide-in': 'slide-in 0.5s ease-out forwards',
+                    'scale-in': 'scale-in 0.3s ease-out forwards',
+                    'gradient-shift': 'gradient-shift 3s ease infinite',
+                    'glow-pulse': 'glow-pulse 3s ease-in-out infinite'
                   },
                   keyframes: {
                     'card-glow': {
-                      'from': { boxShadow: '0 0 20px rgba(255, 107, 53, 0.5)' },
-                      'to': { boxShadow: '0 0 40px rgba(255, 107, 53, 0.8), 0 0 60px rgba(255, 107, 53, 0.3)' }
+                      'from': { transform: 'translateY(0) scale(1)', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)' },
+                      'to': { transform: 'translateY(-8px) scale(1.02)', boxShadow: '0 20px 40px rgba(251, 191, 36, 0.2)' }
                     },
                     'float': {
-                      '0%, 100%': { transform: 'translateY(0px)' },
-                      '50%': { transform: 'translateY(-10px)' }
+                      '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                      '33%': { transform: 'translateY(-8px) rotate(1deg)' },
+                      '66%': { transform: 'translateY(-4px) rotate(-1deg)' }
                     },
                     'pulse-soft': {
                       '0%, 100%': { opacity: '1' },
@@ -74,7 +79,29 @@ export const renderer = jsxRenderer(({ children, title = 'Duelist Emporium - Pre
                     'slide-in': {
                       '0%': { transform: 'translateX(-100%)', opacity: '0' },
                       '100%': { transform: 'translateX(0)', opacity: '1' }
+                    },
+                    'scale-in': {
+                      '0%': { transform: 'scale(0.95)', opacity: '0' },
+                      '100%': { transform: 'scale(1)', opacity: '1' }
+                    },
+                    'gradient-shift': {
+                      '0%': { backgroundPosition: '0% 50%' },
+                      '50%': { backgroundPosition: '100% 50%' },
+                      '100%': { backgroundPosition: '0% 50%' }
+                    },
+                    'glow-pulse': {
+                      '0%, 100%': { 
+                        boxShadow: '0 0 20px rgba(251, 191, 36, 0.3)',
+                        textShadow: '0 0 10px rgba(251, 191, 36, 0.5)'
+                      },
+                      '50%': { 
+                        boxShadow: '0 0 30px rgba(251, 191, 36, 0.6), 0 0 60px rgba(251, 191, 36, 0.2)',
+                        textShadow: '0 0 20px rgba(251, 191, 36, 0.8)'
+                      }
                     }
+                  },
+                  backdropBlur: {
+                    'xs': '2px',
                   }
                 }
               }
@@ -82,20 +109,24 @@ export const renderer = jsxRenderer(({ children, title = 'Duelist Emporium - Pre
           `
         }} />
         
-        {/* Cyber Fonts */}
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+        {/* Enhanced Fonts */}
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
-      <body className="bg-gradient-to-br from-duelist-dark via-duelist-darker to-duelist-purple text-white min-h-screen font-sans antialiased overflow-x-hidden">
-        {/* Matrix Background Pattern */}
-        <div className="fixed inset-0 opacity-10 z-0">
+      <body className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen font-display antialiased overflow-x-hidden">
+        {/* Enhanced Background Pattern */}
+        <div className="fixed inset-0 opacity-5 z-0">
           <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2300d4ff' fill-opacity='0.05'%3E%3Cpath d='M40 40V20H20V0H0v20h20v20z'/%3E%3C/g%3E%3C/svg%3E")`
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fbbf24' fill-opacity='0.1'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px'
           }}></div>
         </div>
         
-        {/* Animated Scan Lines */}
-        <div className="fixed inset-0 z-5 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-duelist-neon-blue/5 to-transparent h-1 animate-scan-line"></div>
+        {/* Floating Elements */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-5">
+          <div className="absolute top-20 left-10 w-16 h-24 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-lg opacity-10 animate-float" style={{ animationDelay: '0s' }}></div>
+          <div className="absolute top-40 right-20 w-12 h-18 bg-gradient-to-b from-blue-400 to-purple-500 rounded-lg opacity-15 animate-bounce-slow" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-32 left-1/4 w-14 h-20 bg-gradient-to-b from-red-400 to-pink-500 rounded-lg opacity-12 animate-pulse-soft" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/3 right-1/3 w-10 h-14 bg-gradient-to-b from-green-400 to-emerald-500 rounded-lg opacity-8 animate-float" style={{ animationDelay: '3s' }}></div>
         </div>
         
         {/* Main Content */}

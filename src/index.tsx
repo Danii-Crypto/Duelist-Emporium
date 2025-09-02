@@ -6,11 +6,16 @@ import { HomePage } from './pages/HomePage'
 import { ShopPage } from './pages/ShopPage'
 import { ProductPage } from './pages/ProductPage'
 import { CartPage } from './pages/CartPage'
+import { CheckoutPage } from './pages/CheckoutPage'
+import { OrderConfirmationPage } from './pages/OrderConfirmationPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { AboutPage } from './pages/AboutPage'
+import { EmailService, formatOrderDate } from './services/emailService'
 
 type Bindings = {
   DB: D1Database
+  RESEND_API_KEY: string
+  OWNER_EMAIL: string
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -116,6 +121,15 @@ app.get('/about', (c) => {
   return c.render(<AboutPage />)
 })
 
+app.get('/checkout', (c) => {
+  return c.render(<CheckoutPage />)
+})
+
+app.get('/order-confirmation/:orderNumber', (c) => {
+  const orderNumber = c.req.param('orderNumber')
+  return c.render(<OrderConfirmationPage orderNumber={orderNumber} />)
+})
+
 // API Routes
 app.get('/api/products', async (c) => {
   const { env } = c
@@ -168,6 +182,119 @@ app.get('/api/products/:id', async (c) => {
   } catch (error) {
     console.error('Database error:', error);
     return c.json({ error: 'Failed to fetch product' }, 500);
+  }
+})
+
+// Order submission API
+app.post('/api/orders', async (c) => {
+  const { env } = c
+  
+  try {
+    const body = await c.req.json()
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+      city,
+      state,
+      zipCode,
+      country,
+      orderNotes,
+      cartItems,
+      subtotal,
+      shipping,
+      total
+    } = body
+
+    // Generate unique order number
+    const orderNumber = 'DE' + Date.now().toString().slice(-8) + Math.random().toString(36).substring(2, 5).toUpperCase()
+    
+    // Prepare customer name and shipping address
+    const customerName = `${firstName} ${lastName}`
+    const shippingAddress = `${address}\n${city}, ${state} ${zipCode}\n${country}`
+    
+    // Insert order into database
+    const result = await env.DB.prepare(`
+      INSERT INTO orders (
+        order_number, customer_name, customer_email, customer_phone,
+        shipping_address, order_notes, order_items, subtotal, shipping_cost, total
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      orderNumber,
+      customerName,
+      email,
+      phone || null,
+      shippingAddress,
+      orderNotes || null,
+      JSON.stringify(cartItems),
+      subtotal,
+      shipping,
+      total
+    ).run()
+
+    if (!result.success) {
+      throw new Error('Failed to create order')
+    }
+
+    // Send email notifications
+    try {
+      // Initialize email service with environment variables
+      const resendApiKey = env.RESEND_API_KEY
+      const ownerEmail = env.OWNER_EMAIL
+      
+      if (resendApiKey && ownerEmail) {
+        const emailService = new EmailService(resendApiKey, ownerEmail)
+        
+        // Prepare order details for email
+        const orderDetails = {
+          orderNumber,
+          customerName,
+          email,
+          phone,
+          shippingAddress,
+          orderNotes,
+          cartItems,
+          subtotal,
+          shipping,
+          total,
+          orderDate: formatOrderDate(new Date())
+        }
+
+        // Send customer confirmation email
+        const customerEmailSent = await emailService.sendCustomerConfirmation(orderDetails)
+        
+        // Send owner notification email
+        const ownerEmailSent = await emailService.sendOwnerNotification(orderDetails)
+        
+        console.log('Email notifications:', {
+          orderNumber,
+          customerEmailSent,
+          ownerEmailSent,
+          customerEmail: email,
+          ownerEmail
+        })
+      } else {
+        console.log('Email service not configured - missing RESEND_API_KEY or OWNER_EMAIL')
+      }
+    } catch (emailError) {
+      // Don't fail the order if email fails
+      console.error('Email notification error:', emailError)
+    }
+
+    return c.json({
+      success: true,
+      orderNumber,
+      message: 'Order submitted successfully'
+    })
+
+  } catch (error) {
+    console.error('Order submission error:', error)
+    return c.json({ 
+      success: false, 
+      error: 'Failed to submit order. Please try again.' 
+    }, 500)
   }
 })
 

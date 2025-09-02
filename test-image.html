@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Test</title>
+</head>
+<body>
+    <h1>External Image Test</h1>
+    
+    <h2>GenSpark Image:</h2>
+    <img src="https://page.gensparksite.com/v1/base64_upload/e85d70cb4ad2d66eccfdad3de67f3598" alt="GenSpark Image" style="width: 200px; height: 200px; border: 1px solid red;" onload="console.log('GenSpark image loaded')" onerror="console.log('GenSpark image failed')">
+    
+    <h2>Unsplash Image:</h2>
+    <img src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=300&fit=crop&crop=center" alt="Unsplash Image" style="width: 200px; height: 200px; border: 1px solid blue;" onload="console.log('Unsplash image loaded')" onerror="console.log('Unsplash image failed')">
+    
+    <h2>Local SVG:</h2>
+    <img src="/static/placeholder-card.svg" alt="Local SVG" style="width: 200px; height: 200px; border: 1px solid green;" onload="console.log('Local SVG loaded')" onerror="console.log('Local SVG failed')">
+    
+    <script>
+        console.log('Test page loaded');
+        setTimeout(() => {
+            const images = document.querySelectorAll('img');
+            images.forEach((img, i) => {
+                console.log(`Image ${i+1}: complete=${img.complete}, naturalWidth=${img.naturalWidth}, naturalHeight=${img.naturalHeight}`);
+            });
+        }, 3000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "firstName": "John",
+  "lastName": "Duelist",
+  "email": "john.duelist@example.com",
+  "phone": "+1-555-0123",
+  "address": "123 Card Street",
+  "city": "Domino City",
+  "state": "California",
+  "zipCode": "90210",
+  "country": "United States",
+  "orderNotes": "Please handle with care - these are for a tournament!",
+  "cartItems": [
+    {
+      "id": 1,
+      "name": "Blue-Eyes White Dragon Deck Box",
+      "price": 29.99,
+      "quantity": 1,
+      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=400&h=400"
+    },
+    {
+      "id": 2,
+      "name": "Dragon Card Sleeves (100ct)",
+      "price": 15.99,
+      "quantity": 2,
+      "image": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=400&h=400"
+    }
+  ],
+  "subtotal": 61.97,
+  "shipping": 9.99,
+  "total": 71.96
+}

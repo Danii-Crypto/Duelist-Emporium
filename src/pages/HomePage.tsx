@@ -1,186 +1,136 @@
 export function HomePage() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-duelist-dark via-duelist-darker to-duelist-purple py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-6xl lg:text-7xl font-bold text-duelist-accent mb-6 animate-glow-pulse">
-            DUELIST EMPORIUM
+      {/* Hero Section - Simplified */}
+      <section className="relative bg-gradient-to-br from-slate-900 to-slate-800 py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+            DUELIST
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+              EMPORIUM
+            </span>
           </h1>
-          <p className="text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
-            Duelist Emporium has been the premier destination for serious Yu-Gi-Oh players. 
-            We understand that every card matters, every tournament counts, and every duelist deserves the finest accessories.
-          </p>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-12">
-            From casual collectors to world championship competitors, our carefully curated selection ensures 
-            you'll find exactly what you need to take your game to the next level.
+          
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-8">
+            Premium Yu-Gi-Oh accessories for competitive duelists
           </p>
           
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <a 
               href="/shop" 
-              className="bg-duelist-accent hover:bg-duelist-gold text-black px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-duelist-accent/30 transform hover:scale-105"
+              className="bg-yellow-400 hover:bg-yellow-300 text-black px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
             >
-              <i className="fas fa-shopping-bag mr-2"></i>
               Browse Collection
             </a>
             <a 
-              href="/about" 
-              className="border-2 border-duelist-accent text-duelist-accent hover:bg-duelist-accent hover:text-black px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300"
+              href="/shop/single-deck-boxes" 
+              className="border-2 border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black px-8 py-4 rounded-lg font-semibold text-lg transition-all"
             >
-              <i className="fas fa-info-circle mr-2"></i>
-              Learn More
+              Deck Boxes
             </a>
-          </div>
-          
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-duelist-accent mb-2">500+</div>
-              <div className="text-gray-400">Premium Products</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-duelist-accent mb-2">15K+</div>
-              <div className="text-gray-400">Happy Duelists</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-duelist-accent mb-2">4.9★</div>
-              <div className="text-gray-400">Customer Rating</div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Categories */}
-      <section className="py-20 bg-duelist-darker">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Shop by Category
-            </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Discover championship-grade accessories for every aspect of your dueling journey
-            </p>
-          </div>
+      {/* Categories Grid - Simplified */}
+      <section className="py-16 bg-slate-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-white text-center mb-12">
+            Shop by Category
+          </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {/* Single Deck Boxes */}
-            <a href="/shop/single-deck-boxes" className="group bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition-all duration-300 border border-transparent hover:border-duelist-accent/30 hover:shadow-lg hover:shadow-duelist-accent/20">
-              <div className="w-16 h-16 bg-duelist-accent rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <i className="fas fa-box text-black text-2xl"></i>
+            <a href="/shop/single-deck-boxes" className="group bg-slate-700 border border-slate-600 rounded-xl p-6 hover:border-yellow-400 transition-all hover:bg-slate-600">
+              <div className="w-12 h-12 bg-yellow-400 rounded-lg flex items-center justify-center mb-4">
+                <i className="fas fa-box text-black text-xl"></i>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-duelist-accent transition-colors">Single Deck Boxes</h3>
-              <p className="text-gray-400 text-sm mb-3">Secure storage for tournament decks</p>
-              <div className="flex items-center space-x-2">
-                <span className="text-duelist-accent font-medium text-sm">Shop Now</span>
-                <i className="fas fa-arrow-right text-duelist-accent text-xs group-hover:translate-x-1 transition-transform"></i>
+              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-yellow-400">Single Deck Boxes</h3>
+              <p className="text-slate-300 text-sm mb-3">Secure magnetic closure boxes for tournament decks</p>
+              <div className="text-yellow-400 text-sm font-medium">
+                10 Colors • From $25
               </div>
             </a>
             
             {/* Multi Deck Boxes */}
-            <a href="/shop/multi-deck-boxes" className="group bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition-all duration-300 border border-transparent hover:border-duelist-accent/30 hover:shadow-lg hover:shadow-duelist-accent/20">
-              <div className="w-16 h-16 bg-duelist-purple rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <i className="fas fa-boxes text-white text-2xl"></i>
+            <a href="/shop/multi-deck-boxes" className="group bg-slate-700 border border-slate-600 rounded-xl p-6 hover:border-purple-400 transition-all hover:bg-slate-600">
+              <div className="w-12 h-12 bg-purple-400 rounded-lg flex items-center justify-center mb-4">
+                <i className="fas fa-boxes text-white text-xl"></i>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-duelist-accent transition-colors">Multi Deck Boxes</h3>
-              <p className="text-gray-400 text-sm mb-3">Premium storage for multiple decks</p>
-              <div className="flex items-center space-x-2">
-                <span className="text-duelist-accent font-medium text-sm">Shop Now</span>
-                <i className="fas fa-arrow-right text-duelist-accent text-xs group-hover:translate-x-1 transition-transform"></i>
+              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-400">Multi Deck Boxes</h3>
+              <p className="text-slate-300 text-sm mb-3">Store multiple decks with compartments</p>
+              <div className="text-purple-400 text-sm font-medium">
+                6 Designs • From $40
               </div>
             </a>
             
             {/* Binders */}
-            <a href="/shop/binders" className="group bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition-all duration-300 border border-transparent hover:border-duelist-accent/30 hover:shadow-lg hover:shadow-duelist-accent/20">
-              <div className="w-16 h-16 bg-duelist-light-purple rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <i className="fas fa-book text-white text-2xl"></i>
+            <a href="/shop/binders" className="group bg-slate-700 border border-slate-600 rounded-xl p-6 hover:border-blue-400 transition-all hover:bg-slate-600">
+              <div className="w-12 h-12 bg-blue-400 rounded-lg flex items-center justify-center mb-4">
+                <i className="fas fa-book text-white text-xl"></i>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-duelist-accent transition-colors">Binders</h3>
-              <p className="text-gray-400 text-sm mb-3">Organize and display your collection</p>
-              <div className="flex items-center space-x-2">
-                <span className="text-duelist-accent font-medium text-sm">Shop Now</span>
-                <i className="fas fa-arrow-right text-duelist-accent text-xs group-hover:translate-x-1 transition-transform"></i>
+              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400">Card Binders</h3>
+              <p className="text-slate-300 text-sm mb-3">Organize and display your collection</p>
+              <div className="text-blue-400 text-sm font-medium">
+                10 Colors • From $35
               </div>
             </a>
             
             {/* Card Sleeves */}
-            <a href="/shop/card-sleeves" className="group bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition-all duration-300 border border-transparent hover:border-duelist-accent/30 hover:shadow-lg hover:shadow-duelist-accent/20">
-              <div className="w-16 h-16 bg-duelist-accent rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <i className="fas fa-layer-group text-black text-2xl"></i>
+            <a href="/shop/card-sleeves" className="group bg-slate-700 border border-slate-600 rounded-xl p-6 hover:border-green-400 transition-all hover:bg-slate-600">
+              <div className="w-12 h-12 bg-green-400 rounded-lg flex items-center justify-center mb-4">
+                <i className="fas fa-layer-group text-black text-xl"></i>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-duelist-accent transition-colors">Card Sleeves</h3>
-              <p className="text-gray-400 text-sm mb-3">Premium protection for your cards</p>
-              <div className="flex items-center space-x-2">
-                <span className="text-duelist-accent font-medium text-sm">Shop Now</span>
-                <i className="fas fa-arrow-right text-duelist-accent text-xs group-hover:translate-x-1 transition-transform"></i>
-              </div>
-            </a>
-          </div>
-          
-          {/* Second Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            {/* Storage */}
-            <a href="/shop/storage" className="group bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition-all duration-300 border border-transparent hover:border-duelist-accent/30 hover:shadow-lg hover:shadow-duelist-accent/20">
-              <div className="w-16 h-16 bg-duelist-purple rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <i className="fas fa-archive text-white text-2xl"></i>
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-duelist-accent transition-colors">Storage</h3>
-              <p className="text-gray-400 text-sm mb-3">Large capacity storage solutions</p>
-              <div className="flex items-center space-x-2">
-                <span className="text-duelist-accent font-medium text-sm">Shop Now</span>
-                <i className="fas fa-arrow-right text-duelist-accent text-xs group-hover:translate-x-1 transition-transform"></i>
-              </div>
-            </a>
-            
-            {/* Booster Cases */}
-            <a href="/shop/booster-cases" className="group bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition-all duration-300 border border-transparent hover:border-duelist-accent/30 hover:shadow-lg hover:shadow-duelist-accent/20">
-              <div className="w-16 h-16 bg-duelist-light-purple rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <i className="fas fa-cube text-white text-2xl"></i>
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-duelist-accent transition-colors">Booster Cases</h3>
-              <p className="text-gray-400 text-sm mb-3">Premium display and protection</p>
-              <div className="flex items-center space-x-2">
-                <span className="text-duelist-accent font-medium text-sm">Shop Now</span>
-                <i className="fas fa-arrow-right text-duelist-accent text-xs group-hover:translate-x-1 transition-transform"></i>
+              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-green-400">Card Sleeves</h3>
+              <p className="text-slate-300 text-sm mb-3">Protect your valuable cards</p>
+              <div className="text-green-400 text-sm font-medium">
+                10 Designs • From $18
               </div>
             </a>
             
             {/* Accessories */}
-            <a href="/shop/accessories" className="group bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition-all duration-300 border border-transparent hover:border-duelist-accent/30 hover:shadow-lg hover:shadow-duelist-accent/20">
-              <div className="w-16 h-16 bg-duelist-accent rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <i className="fas fa-dice text-black text-2xl"></i>
+            <a href="/shop/accessories" className="group bg-slate-700 border border-slate-600 rounded-xl p-6 hover:border-orange-400 transition-all hover:bg-slate-600">
+              <div className="w-12 h-12 bg-orange-400 rounded-lg flex items-center justify-center mb-4">
+                <i className="fas fa-dice text-black text-xl"></i>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-duelist-accent transition-colors">Accessories</h3>
-              <p className="text-gray-400 text-sm mb-3">Essential gaming accessories</p>
-              <div className="flex items-center space-x-2">
-                <span className="text-duelist-accent font-medium text-sm">Shop Now</span>
-                <i className="fas fa-arrow-right text-duelist-accent text-xs group-hover:translate-x-1 transition-transform"></i>
+              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-orange-400">Accessories</h3>
+              <p className="text-slate-300 text-sm mb-3">Professional gaming accessories and tools</p>
+              <div className="text-orange-400 text-sm font-medium">
+                11 Items • From $40
               </div>
             </a>
           </div>
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-20 bg-gradient-to-r from-duelist-dark to-duelist-purple">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Stay Connected
-          </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Get exclusive access to new releases, tournament updates, and special offers for serious duelists.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
-            <input 
-              type="email" 
-              placeholder="Enter your email address" 
-              className="flex-1 px-4 py-3 bg-gray-800 border border-gray-600 focus:border-duelist-accent rounded-lg text-white focus:outline-none"
-            />
-            <button className="px-8 py-3 bg-duelist-accent hover:bg-duelist-gold text-black rounded-lg font-semibold transition-colors">
-              Subscribe
-            </button>
+      {/* Trust Section - Simplified */}
+      <section className="py-16 bg-slate-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+              <div className="w-16 h-16 bg-yellow-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <i className="fas fa-shipping-fast text-black text-xl"></i>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Fast Shipping</h3>
+              <p className="text-slate-400 text-sm">Free shipping on orders over $50</p>
+            </div>
+            
+            <div>
+              <div className="w-16 h-16 bg-green-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <i className="fas fa-shield-alt text-black text-xl"></i>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Authentic Products</h3>
+              <p className="text-slate-400 text-sm">Official licensed merchandise</p>
+            </div>
+            
+            <div>
+              <div className="w-16 h-16 bg-purple-400 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <i className="fas fa-star text-white text-xl"></i>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">4.9★ Rating</h3>
+              <p className="text-slate-400 text-sm">Trusted by 15,000+ duelists</p>
+            </div>
           </div>
         </div>
       </section>

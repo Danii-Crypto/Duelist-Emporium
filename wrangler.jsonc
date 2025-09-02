@@ -12,7 +12,11 @@
       "database_name": "duelist-emporium-production",
       "database_id": "placeholder-will-be-filled-after-db-creation"
     }
-  ]
+  ],
+  "vars": {
+    // Environment variables will be set via wrangler secrets
+    // RESEND_API_KEY and OWNER_EMAIL should be added as secrets
+  }
   // "ai": {
   //   "binding": "AI"
   // }
