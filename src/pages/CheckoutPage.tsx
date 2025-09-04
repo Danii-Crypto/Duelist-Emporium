@@ -40,7 +40,7 @@ export function CheckoutPage() {
                   Order Information
                 </h2>
                 
-                <form id="checkout-form" onsubmit="submitOrder(event)">
+                <form id="checkout-form">
                   {/* Customer Information */}
                   <div className="mb-8">
                     <h3 className="text-lg font-semibold text-white mb-4">Customer Information</h3>

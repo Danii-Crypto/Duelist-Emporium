@@ -328,17 +328,17 @@ class DuelistEmporiumApp {
     // Quick view buttons
     document.querySelectorAll('button').forEach(btn => {
       if (btn.textContent.includes('Quick View')) {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const productCard = btn.closest('[class*="group relative"]');
-        if (productCard) {
-          const productName = productCard.querySelector('h3').textContent;
-          this.showNotification(`Quick view for ${productName} - Feature coming soon!`, 'info');
-        }
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const productCard = btn.closest('[class*="group relative"]');
+          if (productCard) {
+            const productName = productCard.querySelector('h3').textContent;
+            this.showNotification(`Quick view for ${productName} - Feature coming soon!`, 'info');
+          }
+        });
       }
     });
-  }
 
   setupMobileMenu() {
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -640,9 +640,9 @@ window.navigateToCategory = (category) => {
   }
 };
 
-window.addToCart = (productId, productName) => {
+window.addToCart = (productId, productName, price, image) => {
   if (window.duelistApp) {
-    window.duelistApp.addToCart(productId, productName);
+    window.duelistApp.addToCart(productId, productName, price, image);
   }
 };
 
