@@ -287,6 +287,31 @@ class DuelistEmporiumApp {
         this.sortProducts(e.target.value);
       });
     }
+
+    // Add to cart functionality with event delegation
+    document.addEventListener('click', (e) => {
+      // Find the button (might click on icon or text inside)
+      const button = e.target.closest('.add-to-cart-btn');
+      
+      if (button) {
+        e.preventDefault();
+        
+        if (button.disabled) return;
+        
+        const productId = parseInt(button.getAttribute('data-product-id'));
+        const productName = button.getAttribute('data-product-name');
+        const productPrice = parseFloat(button.getAttribute('data-product-price'));
+        const productImage = button.getAttribute('data-product-image');
+        
+        console.log('Add to cart clicked:', { productId, productName, productPrice, productImage });
+        
+        if (productId && productName && productPrice) {
+          this.addToCart(productId, productName, productPrice, productImage);
+        } else {
+          console.error('Missing product data for add to cart');
+        }
+      }
+    });
   }
 
   setupNavigationInteractions() {
@@ -339,6 +364,7 @@ class DuelistEmporiumApp {
         });
       }
     });
+  }
 
   setupMobileMenu() {
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');

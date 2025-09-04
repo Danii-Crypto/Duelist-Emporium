@@ -344,17 +344,16 @@ export function ShopPage({ category, products = [] }: ShopPageProps) {
                         
                         <div className="flex space-x-2">
                           <button 
-                            className={`flex-1 px-4 py-3 rounded-2xl font-bold text-sm transition-all duration-300 ${
+                            className={`add-to-cart-btn flex-1 px-4 py-3 rounded-2xl font-bold text-sm transition-all duration-300 ${
                               product.inStock 
                                 ? 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black hover:shadow-lg hover:shadow-yellow-500/30 hover:scale-105' 
                                 : 'bg-slate-600 text-slate-400 cursor-not-allowed'
                             }`}
                             disabled={!product.inStock}
-                            onClick={() => {
-                              if (product.inStock && typeof window !== 'undefined' && window.addToCart) {
-                                window.addToCart(product.id, product.name, product.price, product.image);
-                              }
-                            }}
+                            data-product-id={product.id}
+                            data-product-name={product.name}
+                            data-product-price={product.price}
+                            data-product-image={product.image}
                           >
                             {product.inStock ? (
                               <>

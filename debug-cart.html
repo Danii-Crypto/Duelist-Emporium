@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Cart - Duelist Emporium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-white p-8">
+    <h1 class="text-2xl font-bold mb-4">Cart Debug Test</h1>
+    
+    <!-- Test button with exact same structure as the real ones -->
+    <button 
+        class="add-to-cart-btn bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg transition-colors"
+        data-product-id="99"
+        data-product-name="Test Product"
+        data-product-price="19.99"
+        data-product-image="/test-image.jpg"
+    >
+        <i class="fas fa-cart-plus mr-2"></i>
+        Add to Cart (Test)
+    </button>
+    
+    <div id="debug-output" class="mt-4 p-4 bg-slate-800 rounded"></div>
+    
+    <script>
+        console.log('Debug script loaded');
+        
+        // Simple cart for testing
+        let debugCart = JSON.parse(localStorage.getItem('duelistCart')) || [];
+        
+        function debugAddToCart(id, name, price, image) {
+            console.log('debugAddToCart called with:', { id, name, price, image });
+            
+            const existingItem = debugCart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                debugCart.push({ id, name, price, image, quantity: 1 });
+            }
+            
+            localStorage.setItem('duelistCart', JSON.stringify(debugCart));
+            updateDebugOutput();
+            
+            // Show success message
+            document.getElementById('debug-output').innerHTML += '<div class="text-green-400">✅ Item added to cart!</div>';
+        }
+        
+        function updateDebugOutput() {
+            const output = document.getElementById('debug-output');
+            output.innerHTML = `
+                <h3 class="font-bold text-yellow-400">Cart Contents:</h3>
+                <pre class="text-sm text-slate-300">${JSON.stringify(debugCart, null, 2)}</pre>
+                <p class="mt-2 text-slate-400">Total items: ${debugCart.reduce((sum, item) => sum + item.quantity, 0)}</p>
+            `;
+        }
+        
+        // Event delegation for add to cart buttons
+        document.addEventListener('click', function(e) {
+            console.log('Click detected on:', e.target);
+            
+            const button = e.target.closest('.add-to-cart-btn');
+            console.log('Closest add-to-cart-btn:', button);
+            
+            if (button) {
+                console.log('Add to cart button clicked!');
+                e.preventDefault();
+                
+                if (button.disabled) {
+                    console.log('Button is disabled');
+                    return;
+                }
+                
+                const productId = parseInt(button.getAttribute('data-product-id'));
+                const productName = button.getAttribute('data-product-name');
+                const productPrice = parseFloat(button.getAttribute('data-product-price'));
+                const productImage = button.getAttribute('data-product-image');
+                
+                console.log('Product data:', { productId, productName, productPrice, productImage });
+                
+                if (productId && productName && productPrice) {
+                    debugAddToCart(productId, productName, productPrice, productImage);
+                } else {
+                    console.error('Missing product data!');
+                    document.getElementById('debug-output').innerHTML += '<div class="text-red-400">❌ Missing product data!</div>';
+                }
+            }
+        });
+        
+        // Initialize
+        updateDebugOutput();
+        console.log('Debug page initialized');
+    </script>
+</body>
+</html>
