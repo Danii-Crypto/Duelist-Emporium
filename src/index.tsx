@@ -11,55 +11,67 @@ import { OrderConfirmationPage } from './pages/OrderConfirmationPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { AboutPage } from './pages/AboutPage'
 import { EmailService, formatOrderDate } from './services/emailService'
+import { fallbackProducts } from './data/fallbackProducts'
 
 type Bindings = {
-  DB: D1Database
-  RESEND_API_KEY: string
-  OWNER_EMAIL: string
+  DB?: D1Database
+  RESEND_API_KEY?: string
+  OWNER_EMAIL?: string
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
 
 // Helper function to fetch and transform products
-async function fetchProducts(env: { DB: D1Database }, category?: string) {
+async function fetchProducts(env: { DB?: D1Database }, category?: string) {
   try {
-    let query = 'SELECT * FROM products'
-    let params: any[] = []
-    
-    if (category) {
-      query += ' WHERE category = ?'
-      params = [category]
+    // Try to use database if available
+    if (env.DB) {
+      let query = 'SELECT * FROM products'
+      let params: any[] = []
+      
+      if (category) {
+        query += ' WHERE category = ?'
+        params = [category]
+      }
+      
+      query += ' ORDER BY created_at DESC'
+      
+      const result = await env.DB.prepare(query).bind(...params).all()
+      
+      // Transform database results to match frontend format
+      const products = result.results.map((product: any) => ({
+        id: product.id,
+        name: product.name,
+        category: product.category,
+        categoryDisplay: product.category.split('-').map((word: string) => 
+          word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' '),
+        price: product.price,
+        rarity: product.price >= 40 ? 'Epic' : product.price >= 25 ? 'Ultra Rare' : 'Rare',
+        image: product.image_url,
+        description: product.description,
+        features: ['Tournament Grade', 'Premium Materials', 'Professional Quality', 'Secure Storage'],
+        stats: { protection: 95, shuffle: 92, durability: 88 },
+        inStock: product.stock_quantity > 0,
+        quantity: product.stock_quantity,
+        theme: product.theme,
+        character_name: product.character_name
+      }))
+      
+      return products
     }
-    
-    query += ' ORDER BY created_at DESC'
-    
-    const result = await env.DB.prepare(query).bind(...params).all()
-    
-    // Transform database results to match frontend format
-    const products = result.results.map((product: any) => ({
-      id: product.id,
-      name: product.name,
-      category: product.category,
-      categoryDisplay: product.category.split('-').map((word: string) => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' '),
-      price: product.price,
-      rarity: product.price >= 40 ? 'Epic' : product.price >= 25 ? 'Ultra Rare' : 'Rare',
-      image: product.image_url,
-      description: product.description,
-      features: ['Tournament Grade', 'Premium Materials', 'Professional Quality', 'Secure Storage'],
-      stats: { protection: 95, shuffle: 92, durability: 88 },
-      inStock: product.stock_quantity > 0,
-      quantity: product.stock_quantity,
-      theme: product.theme,
-      character_name: product.character_name
-    }))
-    
-    return products
   } catch (error) {
-    console.error('Database error:', error)
-    return []
+    console.error('Database error, using fallback products:', error)
   }
+
+  // Fallback to static products if database is unavailable
+  let products = [...fallbackProducts]
+  
+  if (category) {
+    products = products.filter(product => product.category === category)
+  }
+  
+  return products
 }
 
 // Enable CORS for API routes
@@ -146,43 +158,52 @@ app.get('/api/products', async (c) => {
 
 
 
-// Individual product API endpoint - also updated to use database
+// Individual product API endpoint - with fallback support
 app.get('/api/products/:id', async (c) => {
   const { env } = c;
   const id = parseInt(c.req.param('id'));
   
   try {
-    const result = await env.DB.prepare('SELECT * FROM products WHERE id = ?').bind(id).first();
-    
-    if (!result) {
-      return c.json({ error: 'Product not found' }, 404);
+    // Try database first if available
+    if (env.DB) {
+      const result = await env.DB.prepare('SELECT * FROM products WHERE id = ?').bind(id).first();
+      
+      if (result) {
+        // Transform database result to match frontend format
+        const product = {
+          id: result.id,
+          name: result.name,
+          category: result.category,
+          categoryDisplay: result.category.split('-').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' '),
+          price: result.price,
+          rarity: result.price >= 40 ? 'Epic' : result.price >= 25 ? 'Ultra Rare' : 'Rare',
+          image: result.image_url,
+          description: result.description,
+          features: ['Tournament Grade', 'Premium Materials', 'Professional Quality', 'Secure Storage'],
+          stats: { protection: 95, shuffle: 92, durability: 88 },
+          inStock: result.stock_quantity > 0,
+          quantity: result.stock_quantity,
+          theme: result.theme,
+          character_name: result.character_name
+        };
+        
+        return c.json({ product });
+      }
     }
-    
-    // Transform database result to match frontend format
-    const product = {
-      id: result.id,
-      name: result.name,
-      category: result.category,
-      categoryDisplay: result.category.split('-').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' '),
-      price: result.price,
-      rarity: result.price >= 40 ? 'Epic' : result.price >= 25 ? 'Ultra Rare' : 'Rare',
-      image: result.image_url,
-      description: result.description,
-      features: ['Tournament Grade', 'Premium Materials', 'Professional Quality', 'Secure Storage'],
-      stats: { protection: 95, shuffle: 92, durability: 88 },
-      inStock: result.stock_quantity > 0,
-      quantity: result.stock_quantity,
-      theme: result.theme,
-      character_name: result.character_name
-    };
-    
-    return c.json({ product });
   } catch (error) {
-    console.error('Database error:', error);
-    return c.json({ error: 'Failed to fetch product' }, 500);
+    console.error('Database error, using fallback:', error);
   }
+
+  // Fallback to static products
+  const product = fallbackProducts.find(p => p.id === id);
+  
+  if (!product) {
+    return c.json({ error: 'Product not found' }, 404);
+  }
+  
+  return c.json({ product });
 })
 
 // Order submission API
