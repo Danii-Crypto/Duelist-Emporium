@@ -1,14 +1,10 @@
 {
   "build": {
-    "command": "npm ci && npm run build",
+    "command": "npm install --legacy-peer-deps && npm run build",
     "cwd": "/",
     "env": {
-      "NODE_VERSION": "18"
+      "NODE_VERSION": "18.17.0",
+      "NPM_VERSION": "9.6.7"
     }
-  },
-  "deploy": {
-    "cwd": "/",
-    "include": ["dist/**/*"],
-    "exclude": ["node_modules/**/*", ".git/**/*", "src/**/*"]
   }
 }

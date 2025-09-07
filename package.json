@@ -38,7 +38,11 @@
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
     "vite": "^6.3.5",
-    "wrangler": "^4.4.0"
+    "wrangler": "^3.78.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "keywords": ["hono", "cloudflare-pages", "ecommerce", "yu-gi-oh"],
   "repository": {
