@@ -5,10 +5,28 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
-    build(),
+    build({
+      // Ensure proper building for Cloudflare Pages
+      entry: 'src/index.tsx'
+    }),
     devServer({
       adapter,
       entry: 'src/index.tsx'
     })
-  ]
+  ],
+  build: {
+    // Optimize build for Cloudflare Pages
+    target: 'esnext',
+    outDir: 'dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      external: ['__STATIC_CONTENT_MANIFEST']
+    }
+  },
+  resolve: {
+    alias: {
+      // Add path aliases if needed
+      '@': '/src'
+    }
+  }
 })

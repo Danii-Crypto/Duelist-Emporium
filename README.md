@@ -8,6 +8,16 @@
 - **Architecture**: Multi-page application with horizontal category filtering system
 
 ## 🌐 Live URLs
+- **Production**: https://duelist-emporium.pages.dev (Cloudflare Pages)
+- **GitHub Repository**: https://github.com/Danii-Crypto/Duelist-Emporium
+- **API Endpoints**: `/api/products`, `/api/orders`, `/api/test`
+
+## 🚀 Deployment Configuration
+- **Platform**: Cloudflare Pages
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Node Version**: 18+
+- **Auto-deployment**: Enabled via GitHub integration
 - **Main Site**: https://3000-i5iya002k6fmxc95gbyfg-6532622b.e2b.dev
 - **Shop**: https://3000-i5iya002k6fmxc95gbyfg-6532622b.e2b.dev/shop
 - **Products API**: https://3000-i5iya002k6fmxc95gbyfg-6532622b.e2b.dev/api/products

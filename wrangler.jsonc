@@ -1,17 +1,26 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "duelist-emporium-1",
+  "name": "duelist-emporium",
   "compatibility_date": "2024-01-01",
-  "pages_build_output_dir": "./dist",
   "compatibility_flags": ["nodejs_compat"],
   
-  // Production database configuration
-  // You'll need to create this in Cloudflare dashboard and update the database_id
+  // For Pages deployment - this directory contains the built assets
+  "pages_build_output_dir": "dist",
+  
+  // D1 Database binding for production
+  // Create database in Cloudflare dashboard: wrangler d1 create duelist-emporium-production
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "duelist-emporium-production", 
-      "database_id": "YOUR_DATABASE_ID_HERE"
+      "database_name": "duelist-emporium-production",
+      "database_id": "TO_BE_CREATED_IN_DASHBOARD"
     }
-  ]
+  ],
+  
+  // Environment variables to be set in Cloudflare Pages dashboard:
+  // RESEND_API_KEY - For email notifications
+  // OWNER_EMAIL - Where to send order notifications
+  
+  // Local development uses --local flag which creates local SQLite automatically
+  // No separate local database configuration needed
 }

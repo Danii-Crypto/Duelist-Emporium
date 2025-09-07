@@ -1,30 +1,63 @@
 # Dependencies
 node_modules/
 
+# Build outputs
+dist/
+build/
+.output/
+
 # Runtime data
-pids
+pids/
 *.pid
 *.seed
 *.pid.lock
 
-# Compiled binary addons
-build
-dist
-
-# dotenv environment variables file
+# Environment variables - NEVER commit these
 .env
-.env.local
-.env.production
-.env.development
+.env.*
+.dev.vars
+!.env.example
 
-# PM2
+# Wrangler local development
+.wrangler/
+
+# PM2 process manager
 .pm2/
 pids/
 logs/
 *.log
+ecosystem.config.js
 
-# Wrangler
-.wrangler/
+# Database files (local development)
+*.db
+*.sqlite
+*.sqlite3
+
+# Testing
+coverage/
+.nyc_output/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Backup files
 *.backup
@@ -32,12 +65,7 @@ logs/
 *.tar.gz
 *.zip
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+# Temporary files
+tmp/
+temp/
+*.tmp

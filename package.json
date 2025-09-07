@@ -1,36 +1,49 @@
 {
   "name": "duelist-emporium",
   "type": "module",
+  "version": "1.0.0",
+  "description": "Yu-Gi-Oh accessories e-commerce website with order management",
+  "main": "dist/_worker.js",
   "scripts": {
     "dev": "vite",
-    "dev:sandbox": "wrangler pages dev dist --d1=duelist-emporium-production --local --ip 0.0.0.0 --port 3000",
+    "dev:local": "wrangler pages dev dist --d1=duelist-emporium-production --local --ip 0.0.0.0 --port 3000",
     "build": "vite build",
     "preview": "wrangler pages dev dist",
-    "deploy": "npm run build && wrangler pages deploy dist",
-    "deploy:prod": "npm run build && wrangler pages deploy dist --project-name duelist-emporium",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
-    "clean-port": "fuser -k 3000/tcp 2>/dev/null || true",
-    "test": "curl http://localhost:3000",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name duelist-emporium",
+    "type-check": "tsc --noEmit",
+    "lint": "echo 'Add ESLint configuration if needed'",
+    "test": "curl http://localhost:3000 && curl http://localhost:3000/api/products",
     "test:order": "curl -X POST http://localhost:3000/api/orders -H \"Content-Type: application/json\" -d @test-order.json",
+    "clean": "rm -rf dist .wrangler/state",
+    "clean-port": "fuser -k 3000/tcp 2>/dev/null || true",
+    "db:create": "wrangler d1 create duelist-emporium-production",
     "db:migrate:local": "wrangler d1 migrations apply duelist-emporium-production --local",
     "db:migrate:prod": "wrangler d1 migrations apply duelist-emporium-production",
-    "db:seed": "wrangler d1 execute duelist-emporium-production --local --file=./seed.sql",
-    "db:reset": "rm -rf .wrangler/state/v3/d1 && npm run db:migrate:local && npm run db:seed",
+    "db:seed:local": "wrangler d1 execute duelist-emporium-production --local --file=./seed.sql",
+    "db:seed:prod": "wrangler d1 execute duelist-emporium-production --file=./seed.sql",
+    "db:reset": "rm -rf .wrangler/state/v3/d1 && npm run db:migrate:local && npm run db:seed:local",
     "db:console:local": "wrangler d1 execute duelist-emporium-production --local",
     "db:console:prod": "wrangler d1 execute duelist-emporium-production",
-    "secrets:set": "echo 'Use: wrangler pages secret put RESEND_API_KEY --project-name duelist-emporium'",
-    "git:init": "git init && git add . && git commit -m 'Initial commit'",
-    "git:commit": "git add . && git commit -m",
-    "git:status": "git status",
-    "git:log": "git log --oneline"
+    "git:status": "git status --short",
+    "git:log": "git log --oneline -10",
+    "git:push": "git add . && git commit -m 'Update deployment configuration' && git push origin main"
   },
   "dependencies": {
     "hono": "^4.9.5"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240925.0",
     "@hono/vite-build": "^1.2.0",
     "@hono/vite-dev-server": "^0.18.2",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
     "vite": "^6.3.5",
     "wrangler": "^4.4.0"
-  }
+  },
+  "keywords": ["hono", "cloudflare-pages", "ecommerce", "yu-gi-oh"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Danii-Crypto/Duelist-Emporium.git"
+  },
+  "license": "MIT"
 }
